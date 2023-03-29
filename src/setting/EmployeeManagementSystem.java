@@ -30,7 +30,7 @@ public class EmployeeManagementSystem {
         List<Employee> filteredEmployees = new ArrayList<>();
 
         for (Employee employee : employeeList) {
-            if (employee.getSalary() > salary) {
+            if (employee.getSalaryCoefficient() > salary) {
                 filteredEmployees.add(employee);
             }
         }
