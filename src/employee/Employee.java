@@ -4,14 +4,14 @@ package employee;
 public class Employee {
     private int id;
     private String name;
-    private int salaryCoefficient;
+    private double salaryCoefficient;
     private String positionName;
-    private int bonus;
+    private double bonus;
 
-    public Employee(int id, String name, int bonus, String positionName) {
+    public Employee(int id, String name, double bonus, String positionName) {
         this.id = id;
         this.name = name;
-        this.bonus = bonus;
+        this.bonus = Math.round(bonus);
         this.positionName = positionName;
     }
     
@@ -42,18 +42,22 @@ public class Employee {
     }
 
     public void setSalaryCoefficient() {
-        this.salaryCoefficient =  this.salaryCoefficient + this.bonus;
+        this.salaryCoefficient =  Math.round(this.salaryCoefficient + this.bonus);
+    }
+    
+    public void setSalaryCoefficient(double salaryCoefficient) {
+        this.salaryCoefficient = Math.round(salaryCoefficient);
     }
 
     public void setPositionName(String positionName) {
         this.positionName = positionName;
     }
 
-	public int getBonus() {
+	public double getBonus() {
 		return bonus;
 	}
 
-	public void setBonus(int bonus) {
-		this.bonus = bonus;
+	public void setBonus(double bonus) {
+		this.bonus = Math.round(bonus);
 	}
 }
