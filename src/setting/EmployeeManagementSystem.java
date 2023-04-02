@@ -1,20 +1,27 @@
-<<<<<<< HEAD
 package setting;
 
 import java.util.ArrayList;
 import java.util.List;
 import employee.Employee;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import position.Position;
 
 public class EmployeeManagementSystem {
     private List<Employee> employeeList;
-    private List<Position> positionList;
 
     public EmployeeManagementSystem() {
         this.employeeList = new ArrayList<>();
-        this.positionList = new ArrayList<>();
     }
 
+    public List<Employee> getEmployeeList() {
+		return employeeList;
+	}
+
+	public void setEmployeeList(List<Employee> employeeList) {
+		this.employeeList = employeeList;
+	}
+	
     public void addEmployee(Employee employee) {
         employeeList.add(employee);
     }
@@ -23,11 +30,23 @@ public class EmployeeManagementSystem {
         employeeList.remove(employee);
     }
 
-    public void updateEmployee(Employee employee) {
-        // find employee by name and update information
+    public void updateEmployeeID(int index, int ID) {
+    	employeeList.get(index).setId(ID);
+    }
+    
+    public void updateEmployeeName(int index, String name) {
+    	employeeList.get(index).setName(name);
+    }
+    
+    public void updateEmployeePosition(int index, String Position) {
+    	employeeList.get(index).setPositionName(Position);
+    }
+    
+    public void updateEmployeeSalaryCoefficient(int index, double salaryCoefficient) {
+    	employeeList.get(index).setSalaryCoefficient(salaryCoefficient);
     }
 
-    public List<Employee> getEmployeesBySalaryCoefficient(double salary) {
+	public List<Employee> getEmployeesBySalaryCoefficient(double salary) {
         List<Employee> filteredEmployees = new ArrayList<>();
 
         for (Employee employee : employeeList) {
@@ -38,74 +57,4 @@ public class EmployeeManagementSystem {
 
         return filteredEmployees;
     }
-
-    public void addPosition(Position position) {
-        positionList.add(position);
-    }
-
-    public void removePosition(Position position) {
-        positionList.remove(position);
-    }
-
-    public void updatePosition(Position position) {
-        // find position by name and update information
-    }
 }
-
-   
-=======
-package setting;
-
-import java.util.ArrayList;
-import java.util.List;
-import employee.Employee;
-import position.Position;
-
-public class EmployeeManagementSystem {
-    private List<Employee> employeeList;
-    private List<Position> positionList;
-
-    public EmployeeManagementSystem() {
-        this.employeeList = new ArrayList<>();
-        this.positionList = new ArrayList<>();
-    }
-
-    public void addEmployee(Employee employee) {
-        employeeList.add(employee);
-    }
-
-    public void removeEmployee(Employee employee) {
-        employeeList.remove(employee);
-    }
-
-    public void updateEmployee(Employee employee) {
-        // find employee by name and update information
-    }
-
-    public List<Employee> getEmployeesBySalaryCoefficient(double salary) {
-        List<Employee> filteredEmployees = new ArrayList<>();
-
-        for (Employee employee : employeeList) {
-            if (employee.getSalaryCoefficient() > salary) {
-                filteredEmployees.add(employee);
-            }
-        }
-
-        return filteredEmployees;
-    }
-
-    public void addPosition(Position position) {
-        positionList.add(position);
-    }
-
-    public void removePosition(Position position) {
-        positionList.remove(position);
-    }
-
-    public void updatePosition(Position position) {
-        // find position by name and update information
-    }
-}
-
-   
->>>>>>> 6df3917c2002ef1508a7f4621954eb2d1ab1d1a5
