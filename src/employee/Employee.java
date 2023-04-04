@@ -2,6 +2,9 @@ package employee;
 
 import java.io.Serializable;
 
+import position.Position;
+import setting.PositionManagementSystem;
+
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
@@ -42,9 +45,15 @@ public class Employee implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-    public void setSalaryCoefficient() {
-        this.salaryCoefficient =  Math.round(this.salaryCoefficient + this.bonus);
+    
+    public void setSalaryCoefficient(String position, PositionManagementSystem positions) {
+    	double salary_Default = 0.0;
+    	for(Position temp: positions.getPositions()) {
+    		if(position.equals(temp.getName())) {
+    			salary_Default = temp.getSalaryCoefficient();
+    		}
+    	}
+    	this.salaryCoefficient = salary_Default + this.bonus;
     }
     
     public void setSalaryCoefficient(double salaryCoefficient) {

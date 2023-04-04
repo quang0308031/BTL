@@ -3,9 +3,7 @@ package setting;
 import java.util.ArrayList;
 import java.util.List;
 import employee.Employee;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import position.Position;
+import setting.PositionManagementSystem;
 
 public class EmployeeManagementSystem {
     private List<Employee> employeeList;
@@ -38,8 +36,15 @@ public class EmployeeManagementSystem {
     	employeeList.get(index).setName(name);
     }
     
-    public void updateEmployeePosition(int index, String Position) {
-    	employeeList.get(index).setPositionName(Position);
+    public void updateEmployeePosition(int index, String position, PositionManagementSystem positions) {
+    	employeeList.get(index).setPositionName(position);
+    	employeeList.get(index).setSalaryCoefficient(position, positions);
+    }
+    
+    public void updateEmployeeSalary(String position, PositionManagementSystem positions) {
+    	for (Employee temp: this.employeeList) {
+    		temp.setSalaryCoefficient(position, positions);
+    	}
     }
     
     public void updateEmployeeSalaryCoefficient(int index, double salaryCoefficient) {
@@ -50,7 +55,7 @@ public class EmployeeManagementSystem {
         List<Employee> filteredEmployees = new ArrayList<>();
 
         for (Employee employee : employeeList) {
-            if (employee.getSalaryCoefficient() > salary) {
+            if (employee.getSalaryCoefficient() - employee.getBonus() >= salary) {
                 filteredEmployees.add(employee);
             }
         }

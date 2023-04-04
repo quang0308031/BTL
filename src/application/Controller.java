@@ -139,6 +139,17 @@ public class Controller implements Initializable{
     @FXML
     private TableView<Position> tbPosition;
     
+    public int checkPos(String position) {
+    	int check = 0;
+		for (Position checkPosition: positionList) {
+			if(checkPosition.getName().equals(position)) {
+				check = 1;
+				break;
+			}
+		}
+		return check;
+    }
+    
     public void changeEmpID (CellEditEvent edditedcell) {
     	int index = tbEmployee.getSelectionModel().getSelectedIndex();
     	if(edditedcell.getNewValue() != null) {
@@ -181,15 +192,14 @@ public class Controller implements Initializable{
     }
     
     public void changeEmpPosition (CellEditEvent edditedcell) {
-    	if(!edditedcell.getNewValue().toString().trim().equals("")) {
-	    	Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
-	    	employeeSlected.setPositionName(edditedcell.getNewValue().toString().trim());
-	    	dataEmp.updateEmployeePosition(employeeList.indexOf(employeeSlected), edditedcell.getNewValue().toString().trim());
-    	}else {
+    	Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
+    	if(checkPos(edditedcell.getNewValue().toString().trim()) == 0 && !edditedcell.getNewValue().toString().trim().equals("")) {
     		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Không thể thay thế bằng chuỗi rỗng!");
+			alert.setContentText("Cảnh báo hiện không có chức vụ này!\n* Nếu bạn muốn sử dụng tên này vui lòng tạo chức vụ này.\n* Xác nhận lại tại cột 'Chức vụ' để cập nhật lại lương thưởng cho nhân viên này.");
 			alert.show();
     	}
+    	employeeSlected.setPositionName(edditedcell.getNewValue().toString().trim());
+    	dataEmp.updateEmployeePosition(employeeList.indexOf(employeeSlected), edditedcell.getNewValue().toString().trim(), dataPos);
     	updateTableEmployee();
     }
     
@@ -319,7 +329,7 @@ public class Controller implements Initializable{
 	 */
 	@FXML
 	public void Add (ActionEvent event) {
-		if(!employeeID.getText().trim().equals("") && !employeeName.getText().trim().equals("") && !employeePosition.getText().trim().equals("")) {
+		if(!employeeID.getText().trim().equals("") && !employeeName.getText().trim().equals("")) {
 			for (Employee temp: employeeList) {
 				if(temp.getId() == Integer.parseInt(employeeID.getText().trim())) {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -338,11 +348,15 @@ public class Controller implements Initializable{
 				return;
 			}
 			newEmployee.setName(employeeName.getText().trim());
+			if(checkPos(employeeName.getText().trim()) == 0 && !employeePosition.getText().trim().equals("")) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION);
+				alert.setContentText("Cảnh báo hiện không có chức vụ này!\n* Nếu bạn muốn sử dụng tên này vui lòng tạo chức vụ này.\n* Xác nhận lại tại cột 'Chức vụ' để cập nhật lại lương thưởng cho nhân viên này.");
+				alert.show();
+			}
 			newEmployee.setPositionName(employeePosition.getText().trim());
 			try {
 				if(!employeeSalaryBonus.getText().trim().equals("")) {
 					newEmployee.setBonus(Integer.parseInt(employeeSalaryBonus.getText().trim()));
-					newEmployee.setSalaryCoefficient();
 				}
 			}catch(Exception e) {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -350,6 +364,7 @@ public class Controller implements Initializable{
 				alert.show();
 				return;
 			}
+			newEmployee.setSalaryCoefficient(employeePosition.getText().trim(), dataPos);
 			employeeList.add(newEmployee);
 			dataEmp.addEmployee(newEmployee);
 			employeeName.setText("");
@@ -485,7 +500,7 @@ public class Controller implements Initializable{
                 } else if (String.valueOf(position.getSalaryCoefficient()).contains(lowerCaseFilter)) {
                 	return true;
                 }
-
+                
                 return false;
             });
         });
@@ -494,6 +509,24 @@ public class Controller implements Initializable{
 		sortedData.comparatorProperty().bind(tbPosition.comparatorProperty());
 	
         tbPosition.setItems(filteredData);
+	}
+	
+	@FXML
+	void search_employee_salary() {
+		FilteredList<Employee> filteredData = new FilteredList<>(employeeList, p -> true);
+
+		employeeSalary.textProperty().addListener((observable, oldValue, newValue) -> {
+			filteredData.setPredicate(employee -> {
+			    System.out.println("Salary Coefficient: " + employee.getSalaryCoefficient());
+			    System.out.println("Bonus: " + employee.getBonus());
+			    return (employee.getSalaryCoefficient() - employee.getBonus()) >= Double.parseDouble(newValue);
+			});
+        });
+        SortedList<Employee> sortedData = new SortedList<>(filteredData);
+
+		sortedData.comparatorProperty().bind(tbEmployee.comparatorProperty());
+	
+        tbEmployee.setItems(filteredData);
 	}
 	
 	@Override

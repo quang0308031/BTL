@@ -90,7 +90,8 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Button layoutX="487.0" layoutY="523.0" mnemonicParsing="false" text="Search" />
+                  <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Search" />
+                  <Button layoutX="516.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Reset" />
                </children></AnchorPane>
       </content>
     </Tab>
