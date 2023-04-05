@@ -50,48 +50,49 @@
                <children>
                   <TableView fx:id="tbEmployee" layoutX="16.0" layoutY="33.0" prefHeight="402.0" prefWidth="570.0" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="33.0">
                     <columns>
-                      <TableColumn fx:id="empIDcol" onEditCommit="#changeEmpID" prefWidth="85.0" text="ID" />
+                      <TableColumn fx:id="empIDcol" onEditCommit="#changeEmpID" prefWidth="60.0" text="ID" />
                       <TableColumn fx:id="empNamecol" onEditCommit="#changeEmpName" prefWidth="140.0" text="Họ và tên" />
-                        <TableColumn fx:id="empSalarycol" onEditCommit="#changeEmpSalary" prefWidth="213.0" text="Tiền lương" />
-                        <TableColumn fx:id="empPositioncol" onEditCommit="#changeEmpPosition" prefWidth="132.0" text="Chức vụ" />
+                        <TableColumn fx:id="empPositioncol" minWidth="0.0" onEditCommit="#changeEmpPosition" prefWidth="98.0" text="Chức vụ" />
+                        <TableColumn fx:id="empBonuscol" onEditCommit="#changeEmpBonus" prefWidth="106.0" text="Tiền thưởng" />
+                        <TableColumn fx:id="empSalarycol" onEditCommit="#changeEmpSalary" prefWidth="165.0" text="Tổng tiền lương" />
                     </columns>
                   </TableView>
-                  <TextField fx:id="employeeID" layoutX="15.0" layoutY="474.0" prefHeight="25.0" prefWidth="84.0" />
-                  <TextField fx:id="employeeName" layoutX="123.0" layoutY="474.0" prefHeight="25.0" prefWidth="217.0" />
-                  <TextField fx:id="employeePosition" layoutX="16.0" layoutY="523.0" prefHeight="25.0" prefWidth="115.0" />
-                  <TextField fx:id="employeeSalaryBonus" layoutX="155.0" layoutY="523.0" prefHeight="25.0" prefWidth="185.0" />
-                  <Button layoutX="364.0" layoutY="518.0" mnemonicParsing="false" onAction="#Add" prefHeight="30.0" prefWidth="61.0" text="Add" />
-                  <Label layoutX="16.0" layoutY="449.0" prefHeight="17.0" prefWidth="30.0" text="ID :">
+                  <TextField fx:id="employeeID" layoutX="15.0" layoutY="474.0" prefHeight="25.0" prefWidth="84.0" AnchorPane.bottomAnchor="63.0" AnchorPane.leftAnchor="15.0" />
+                  <TextField fx:id="employeeName" layoutX="123.0" layoutY="474.0" prefHeight="25.0" prefWidth="217.0" AnchorPane.bottomAnchor="63.0" AnchorPane.leftAnchor="123.0" />
+                  <TextField fx:id="employeePosition" layoutX="16.0" layoutY="523.0" prefHeight="25.0" prefWidth="115.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="16.0" />
+                  <TextField fx:id="employeeSalaryBonus" layoutX="155.0" layoutY="523.0" prefHeight="25.0" prefWidth="185.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="155.0" />
+                  <Button layoutX="364.0" layoutY="518.0" mnemonicParsing="false" onAction="#Add" prefHeight="30.0" prefWidth="61.0" text="Add" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="364.0" />
+                  <Label layoutX="16.0" layoutY="449.0" prefHeight="17.0" prefWidth="30.0" text="ID :" AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="16.0">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="124.0" layoutY="449.0" text="Họ và tên :">
+                  <Label layoutX="124.0" layoutY="449.0" text="Họ và tên :" AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="124.0">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="17.0" layoutY="499.0" text="Chức vụ :">
+                  <Label layoutX="17.0" layoutY="499.0" text="Chức vụ :" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="16.0">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="155.0" layoutY="499.0" text="Tiền thưởng :">
+                  <Label layoutX="155.0" layoutY="499.0" text="Tiền thưởng :" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="155.0">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Button layoutX="364.0" layoutY="474.0" mnemonicParsing="false" onAction="#Remove" prefHeight="30.0" prefWidth="61.0" text="Remove" />
-                  <TextField fx:id="filterFieldEmp" layoutX="437.0" layoutY="4.0" promptText="Search..." AnchorPane.topAnchor="4.0" />
-                  <Label layoutX="390.0" layoutY="8.0" text="Search :" />
-                  <TextField fx:id="employeeSalary" layoutX="438.0" layoutY="487.0" />
-                  <Label layoutX="449.0" layoutY="462.0" text="Hệ số lương trên :">
+                  <Button layoutX="364.0" layoutY="474.0" mnemonicParsing="false" onAction="#Remove" prefHeight="30.0" prefWidth="61.0" text="Remove" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="364.0" />
+                  <TextField fx:id="filterFieldEmp" layoutX="437.0" layoutY="4.0" promptText="Search..." AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="4.0" />
+                  <Label layoutX="390.0" layoutY="8.0" text="Search :" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="8.0" />
+                  <TextField fx:id="employeeSalary" layoutX="438.0" layoutY="487.0" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="15.0" />
+                  <Label layoutX="449.0" layoutY="462.0" text="Hệ số lương trên :" AnchorPane.bottomAnchor="75.0" AnchorPane.rightAnchor="26.0">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="43.0" text="Save" />
-                  <Button layoutX="492.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="Save and close" />
+                  <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" onAction="#loadDataEmp" prefHeight="25.0" prefWidth="70.0" text="Load" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="94.0" />
+                  <Button layoutX="493.0" layoutY="523.0" mnemonicParsing="false" onAction="#saveDataEmp" prefHeight="25.0" prefWidth="70.0" text="Save" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="15.0" />
                </children></AnchorPane>
       </content>
     </Tab>
@@ -99,7 +100,7 @@
          <content>
             <AnchorPane>
                <children>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="562.0" prefWidth="602.0">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="562.0" prefWidth="602.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <TableView fx:id="tbPosition" layoutX="16.0" layoutY="33.0" prefHeight="402.0" prefWidth="570.0" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="33.0">
                            <columns>
@@ -108,36 +109,36 @@
                               <TableColumn fx:id="posSalarycol" onEditCommit="#changePosSalary" prefWidth="345.0" text="Hệ số lương" />
                            </columns>
                         </TableView>
-                        <TextField fx:id="positionName" layoutX="123.0" layoutY="474.0" prefHeight="25.0" prefWidth="217.0" />
-                        <TextField fx:id="positionSalary" layoutX="15.0" layoutY="523.0" prefHeight="25.0" prefWidth="325.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
                         <TextField fx:id="positionID" layoutX="15.0" layoutY="474.0" prefHeight="25.0" prefWidth="84.0" AnchorPane.bottomAnchor="63.0" AnchorPane.leftAnchor="15.0" />
-                        <Button layoutX="364.0" layoutY="518.0" mnemonicParsing="false" onAction="#AddPos" prefHeight="30.0" prefWidth="61.0" text="Add" />
-                        <Label layoutX="16.0" layoutY="449.0" prefHeight="17.0" prefWidth="30.0" text="ID :">
+                        <TextField fx:id="positionName" layoutX="123.0" layoutY="474.0" prefHeight="25.0" prefWidth="217.0" AnchorPane.bottomAnchor="63.0" AnchorPane.leftAnchor="123.0" />
+                        <TextField fx:id="positionSalary" layoutX="15.0" layoutY="523.0" prefHeight="25.0" prefWidth="325.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
+                        <Button layoutX="364.0" layoutY="518.0" mnemonicParsing="false" onAction="#AddPos" prefHeight="30.0" prefWidth="61.0" text="Add" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="364.0" />
+                        <Label layoutX="16.0" layoutY="449.0" prefHeight="17.0" prefWidth="30.0" text="ID :" AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="16.0">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label layoutX="124.0" layoutY="449.0" text="Tên chức vụ :">
+                        <Label layoutX="124.0" layoutY="449.0" text="Tên chức vụ :" AnchorPane.bottomAnchor="88.0" AnchorPane.leftAnchor="124.0">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label layoutX="17.0" layoutY="499.0" text="Hệ số lương :">
+                        <Label layoutX="17.0" layoutY="499.0" text="Hệ số lương :" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="17.0">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Button layoutX="364.0" layoutY="474.0" mnemonicParsing="false" onAction="#RemovePos" prefHeight="30.0" prefWidth="61.0" text="Remove" />
+                        <Button layoutX="364.0" layoutY="474.0" mnemonicParsing="false" onAction="#RemovePos" prefHeight="30.0" prefWidth="61.0" text="Remove" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="364.0" />
                         <TextField fx:id="filterFieldPos" layoutX="437.0" layoutY="4.0" promptText="Search..." AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="4.0" />
                         <Label layoutX="390.0" layoutY="8.0" text="Search :" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="8.0" />
-                        <TextField fx:id="positionSalaryS" layoutX="438.0" layoutY="487.0" />
-                        <Label layoutX="449.0" layoutY="462.0" text="Hệ số lương trên :">
+                        <TextField fx:id="positionSalaryS" layoutX="438.0" layoutY="487.0" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="15.0" />
+                        <Label layoutX="449.0" layoutY="462.0" text="Hệ số lương trên :" AnchorPane.bottomAnchor="75.0" AnchorPane.rightAnchor="26.0">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="43.0" text="Save" />
-                        <Button layoutX="492.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="Save and close" />
+                        <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" onAction="#loadDataPos" prefHeight="25.0" prefWidth="70.0" text="Load" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="94.0" />
+                        <Button layoutX="492.0" layoutY="523.0" mnemonicParsing="false" onAction="#saveDataPos" prefHeight="25.0" prefWidth="70.0" text="Save" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="15.0" />
                      </children>
                   </AnchorPane>
                </children>

@@ -6,11 +6,21 @@ import java.util.List;
 
 public class FileDataAccessObject<T extends Serializable> {
     private String fileName;
-
+    
+    /**
+     * 
+     * @param fileName
+     * Lấy đường dẫn
+     */
     public FileDataAccessObject(String fileName) {
         this.fileName = fileName;
     }
 
+    /**
+     * 
+     * @param data
+     * Lưu dữ liệu từ file
+     */
     public void save(List<T> data) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
             out.writeObject(data);
@@ -19,6 +29,11 @@ public class FileDataAccessObject<T extends Serializable> {
         }
     }
 
+    /**
+     * 
+     * @return 
+     * Lấy dữ liệu từ file
+     */
     public List<T> load() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
             return (List<T>) in.readObject();

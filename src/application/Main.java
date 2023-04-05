@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 
 public class Main extends Application {
 
@@ -17,6 +18,8 @@ public class Main extends Application {
         try{
             Parent root = FXMLLoader.load(this.getClass().getResource("BTL.fxml"));
             Scene scene = new Scene(root);
+            primaryStage.getIcons().add(new Image("C:\\Users\\quang\\Documents\\BTL\\icon\\download.png"));
+            primaryStage.setTitle("Quản lí nhân sự.");
             primaryStage.setScene(scene);
             primaryStage.show();
         }catch (Exception e){

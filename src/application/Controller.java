@@ -4,10 +4,12 @@ import employee.Employee;
 import position.Position;
 import setting.EmployeeManagementSystem;
 import setting.PositionManagementSystem;
+import file.FileDataAccessObject;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -24,11 +26,79 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.ImageView;
 import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Nguyễn Thanh Quang
+ *
+ */
 public class Controller implements Initializable{
+	LoadAndSave data = new LoadAndSave();
+	
+	/*
+	 * Tạo list rỗng chứa thông tin danh sách nhân viên
+	 */
+	private EmployeeManagementSystem dataEmp = data.getDataEmp();
+	/*
+	 * Tạo list rỗng chứa thông tin danh sách chức vụ
+	 */
+	private PositionManagementSystem dataPos = data.getDataPos();
+	
+    /*
+     * Tạo dữ liệu cho tbEmployee
+     */
+    private ObservableList<Employee> employeeList = FXCollections.observableArrayList(dataEmp.getEmployeeList());
+    
+    /*
+     * Tạo dữ liệu cho tbPosition
+     */
+    private ObservableList<Position> positionList = FXCollections.observableArrayList(dataPos.getPositions());
+	
+	/**
+	 * 
+	 * @param contentText
+	 * Hiển thị cửa sổ báo lỗi
+	 */
+	private void showErrorAlert(String contentText) {
+	    Alert alert = new Alert(Alert.AlertType.ERROR);
+	    alert.setTitle("Error");
+	    alert.setHeaderText("Error!");
+	    alert.setContentText(contentText);
+	    
+	    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+	    stage.getIcons().add(new Image("file:C:\\Users\\quang\\Documents\\BTL\\icon\\error-icon-4.png"));
+	    
+	    alert.showAndWait();
+	    
+	}
+	
+	/**
+	 * 
+	 * @param contentText
+	 * Hiển thị cửa sổ cảnh báo
+	 */
+	private void showWarningAlert(String contentText) {
+	    Alert alert = new Alert(Alert.AlertType.WARNING);
+	    alert.setTitle("Waning");
+	    alert.setHeaderText("Waning!");
+	    alert.setContentText(contentText);
+	    
+	    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+	    stage.getIcons().add(new Image("file:C:\\Users\\quang\\Documents\\BTL\\icon\\6897039.png"));
+	    
+	    alert.showAndWait();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * Kiểm tra nếu String không phải dạng số thì trả về -1
+	 */
 	public static class CustomIntegerStringConverter extends IntegerStringConverter {
 	    private final IntegerStringConverter converter = new IntegerStringConverter();
 
@@ -53,6 +123,10 @@ public class Controller implements Initializable{
 	    }
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * Kiểm tra nếu String không phải dạng số thì trả về -1
+	 */
 	public class CustomDoubleStringConverter extends StringConverter<Double> {
 	    @Override
 	    public String toString(Double value) {
@@ -71,9 +145,6 @@ public class Controller implements Initializable{
 	        }
 	    }
 	}
-			
-	EmployeeManagementSystem dataEmp = new EmployeeManagementSystem();
-	PositionManagementSystem dataPos = new PositionManagementSystem();
 	
     @FXML
     private TableColumn<Employee, Integer> empIDcol;
@@ -87,7 +158,8 @@ public class Controller implements Initializable{
     @FXML
     private TableColumn<Employee, Double> empSalarycol;
     
-    private ObservableList<Employee> employeeList = FXCollections.observableArrayList(dataEmp.getEmployeeList());
+    @FXML
+    private TableColumn<Employee, Double> empBonuscol;
         
     @FXML
     private TextField employeeID;
@@ -115,8 +187,6 @@ public class Controller implements Initializable{
 
     @FXML
     private TableColumn<Position, Double> posSalarycol;
-    
-    private ObservableList<Position> positionList = FXCollections.observableArrayList(dataPos.getPositions());
 
     @FXML
     private TextField positionID;
@@ -139,6 +209,12 @@ public class Controller implements Initializable{
     @FXML
     private TableView<Position> tbPosition;
     
+    /**
+     * 
+     * 
+     * @param position
+     * @return 0 nếu có chức vụ, 1 nếu không có chức vụ
+     */
     public int checkPos(String position) {
     	int check = 0;
 		for (Position checkPosition: positionList) {
@@ -150,19 +226,22 @@ public class Controller implements Initializable{
 		return check;
     }
     
+    /**
+     * 
+     * @param edditedcell
+     * Thay đổi một ô được chọn trong cột empIDcol
+     */
     public void changeEmpID (CellEditEvent edditedcell) {
     	int index = tbEmployee.getSelectionModel().getSelectedIndex();
     	if(edditedcell.getNewValue() != null) {
 	    	int temp_ID = Integer.parseInt(edditedcell.getNewValue().toString().trim());
 	    	for (Employee temp: employeeList) {
 				if(temp.getId() == temp_ID && empIDcol.getCellData(index) != temp_ID || temp_ID == -1) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					if(temp_ID == -1) {
-						alert.setContentText("ID phải là số nguyên!");
+						showErrorAlert("ID phải là số nguyên!");
 					}else {
-						alert.setContentText("ID đã được sử dụng!");
+						showErrorAlert("ID đã được sử dụng!");
 					}
-					alert.show();
 					updateTableEmployee();
 					return;
 				}
@@ -171,64 +250,96 @@ public class Controller implements Initializable{
 	    	employeeSlected.setId(temp_ID);
 	    	dataEmp.updateEmployeeID(employeeList.indexOf(employeeSlected), temp_ID);
     	}else {
-    		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Không thể thay thế bằng chuỗi rỗng!");
-			alert.show();
+    		showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
     	}
     	updateTableEmployee();
     }
     
+    /**
+     * 
+     * @param edditedcell
+     * Thay đổi một ô được chọn trong cột empNamecol
+     */
     public void changeEmpName (CellEditEvent edditedcell) {
     	if(!edditedcell.getNewValue().toString().trim().equals("")) {
 	    	Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
 	    	employeeSlected.setName(edditedcell.getNewValue().toString().trim());
 	    	dataEmp.updateEmployeeName(employeeList.indexOf(employeeSlected), edditedcell.getNewValue().toString().trim());
     	}else {
-    		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Không thể thay thế bằng chuỗi rỗng!");
-			alert.show();
+    		showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
     	}
     	updateTableEmployee();
     }
     
+    /**
+     * 
+     * @param edditedcell
+     * Thay đổi một ô được chọn trong cột empPositioncol
+     */
     public void changeEmpPosition (CellEditEvent edditedcell) {
     	Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
     	if(checkPos(edditedcell.getNewValue().toString().trim()) == 0 && !edditedcell.getNewValue().toString().trim().equals("")) {
-    		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Cảnh báo hiện không có chức vụ này!\n* Nếu bạn muốn sử dụng tên này vui lòng tạo chức vụ này.\n* Xác nhận lại tại cột 'Chức vụ' để cập nhật lại lương thưởng cho nhân viên này.");
-			alert.show();
+    		showWarningAlert("Cảnh báo hiện không có chức vụ này!\n* Nếu bạn muốn sử dụng tên này vui lòng tạo chức vụ này.\n* Xác nhận lại tại cột 'Chức vụ' để cập nhật lại lương thưởng cho nhân viên này.");
     	}
     	employeeSlected.setPositionName(edditedcell.getNewValue().toString().trim());
     	dataEmp.updateEmployeePosition(employeeList.indexOf(employeeSlected), edditedcell.getNewValue().toString().trim(), dataPos);
     	updateTableEmployee();
     }
     
-    public void changeEmpSalary (CellEditEvent edditedcell) {
+    /**
+     * 
+     * @param edditedcell
+     * Thay đổi một ô được chọn trong cột empSalarycol
+     */
+    public void changeEmpBonus (CellEditEvent edditedcell) {
     	if(edditedcell.getNewValue() != null) {
 	    	Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
-	    	employeeSlected.setSalary(Double.parseDouble(edditedcell.getNewValue().toString().trim()));
-	    	dataEmp.updateEmployeeSalaryCoefficient(employeeList.indexOf(employeeSlected), Double.parseDouble(edditedcell.getNewValue().toString().trim()));
+	    	employeeSlected.setBonus(Double.parseDouble(edditedcell.getNewValue().toString().trim()));
+	    	dataEmp.updateEmployeeBonus(employeeList.indexOf(employeeSlected), Double.parseDouble(edditedcell.getNewValue().toString().trim()));
+	    	dataEmp.updateEmployeePosition(employeeList.indexOf(employeeSlected), employeeList.get(employeeList.indexOf(employeeSlected)).getPositionName(), dataPos);
     	}else {
     		Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
-	    	employeeSlected.setSalary(0.0);
-	    	dataEmp.updateEmployeeSalaryCoefficient(employeeList.indexOf(employeeSlected), 0.0);
+	    	employeeSlected.setBonus(0.0);
+	    	dataEmp.updateEmployeeBonus(employeeList.indexOf(employeeSlected), 0.0);
+	    	dataEmp.updateEmployeePosition(employeeList.indexOf(employeeSlected), employeeList.get(employeeList.indexOf(employeeSlected)).getPositionName(), dataPos);
     	}
     	updateTableEmployee();
     }
     
+    /**
+     * 
+     * @param edditedcell
+     * Thay đổi một ô được chọn trong cột empSalarycol
+     */
+    public void changeEmpSalary (CellEditEvent edditedcell) {
+    	if(edditedcell.getNewValue() != null) {
+	    	Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
+	    	employeeSlected.setSalary(Double.parseDouble(edditedcell.getNewValue().toString().trim()));
+	    	dataEmp.updateEmployeeSalary(employeeList.indexOf(employeeSlected), Double.parseDouble(edditedcell.getNewValue().toString().trim()));
+    	}else {
+    		Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
+	    	employeeSlected.setSalary(0.0);
+	    	dataEmp.updateEmployeeSalary(employeeList.indexOf(employeeSlected), 0.0);
+    	}
+    	updateTableEmployee();
+    }
+    
+    /**
+     * 
+     * @param edditedcell
+     * Thay đổi một ô được chọn trong cột posIDcol
+     */
     public void changePosID (CellEditEvent edditedcell) {
     	int index = tbPosition.getSelectionModel().getSelectedIndex();
     	if(edditedcell.getNewValue() != null) {
 	    	int temp_ID = Integer.parseInt(edditedcell.getNewValue().toString().trim());
 	    	for (Position temp: positionList) {
 				if(temp.getID() == temp_ID && posIDcol.getCellData(index) != temp_ID) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					if(temp_ID == -1) {
-						alert.setContentText("ID phải là số nguyên!");
+						showErrorAlert("ID phải là số nguyên!");
 					}else {
-						alert.setContentText("ID đã được sử dụng!");
+						showErrorAlert("ID đã được sử dụng!");
 					}
-					alert.show();
 					updateTablePosition();
 					return;
 				}
@@ -237,22 +348,23 @@ public class Controller implements Initializable{
 	    	positionSlected.setID(temp_ID);
 	    	dataPos.updatePositionID(index, temp_ID);
     	}else {
-    		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Không thể thay thế bằng chuỗi rỗng!");
-			alert.show();
+    		showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
     	}
     	updateTablePosition();
     }
     
+    /**
+     * 
+     * @param edditedcell
+     * Thay đổi một ô được chọn trong cột posNamecol
+     */
     public void changePosName (CellEditEvent edditedcell) {
     	int index = tbPosition.getSelectionModel().getSelectedIndex();
     	if(!edditedcell.getNewValue().toString().trim().equals("")) {
     		for (Position temp: positionList) {
     			String temp_Name = edditedcell.getNewValue().toString().trim();
 				if(temp.getName().equals(temp_Name)&& !posNamecol.getCellData(index).equals(temp_Name)) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					alert.setContentText("Đã được có chức vụ này!");
-					alert.show();
+					showErrorAlert("Đã có chức vụ này!");
 					updateTablePosition();
 					return;
 				}
@@ -261,13 +373,16 @@ public class Controller implements Initializable{
 	    	positionSlected.setName(edditedcell.getNewValue().toString().trim());
 	    	dataPos.updatePositionName(positionList.indexOf(positionSlected), edditedcell.getNewValue().toString().trim());
     	}else {
-    		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Không thể thay thế bằng chuỗi rỗng!");
-			alert.show();
+    		showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
     	}
     	updateTablePosition();
     }
     
+    /**
+     * 
+     * @param edditedcell
+     * Thay đổi một ô được chọn trong cột posSalarycol
+     */
     public void changePosSalary (CellEditEvent edditedcell) {
     	if(edditedcell.getNewValue() != null) {
 	    	Position positionSlected = tbPosition.getSelectionModel().getSelectedItem();
@@ -281,11 +396,15 @@ public class Controller implements Initializable{
     	updateTablePosition();
     }
     
+    /**
+     * Update tbEmployee khi có thay đổi
+     */
     public void updateTableEmployee() {
     	empIDcol.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("id"));
 		empNamecol.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));
 		empPositioncol.setCellValueFactory(new PropertyValueFactory<Employee, String>("positionName"));
 		empSalarycol.setCellValueFactory(new PropertyValueFactory<Employee, Double>("salary"));
+		empBonuscol.setCellValueFactory(new PropertyValueFactory<Employee, Double>("bonus"));
 		tbEmployee.setItems(employeeList);
 		tbEmployee.setEditable(true);
 		empIDcol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomIntegerStringConverter()));
@@ -294,15 +413,21 @@ public class Controller implements Initializable{
 		try {
 			empSalarycol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomDoubleStringConverter()));
 		}catch(Exception e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Tiền lương phải là số nguyên!");
-			alert.show();
+			showErrorAlert("Tiền lương phải là số nguyên!");
 			return;
 		}
-		search_employee();
-		search_employee_salary();
+		try {
+			empBonuscol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomDoubleStringConverter()));
+		}catch(Exception e) {
+			showErrorAlert("Tiền lương phải là số nguyên!");
+			return;
+		}
+		search_employee_combined();
     }
     
+    /**
+     * Update tbPosition khi có thay đổi
+     */
     public void updateTablePosition() {
     	posIDcol.setCellValueFactory(new PropertyValueFactory<Position, Integer>("ID"));
 		posNamecol.setCellValueFactory(new PropertyValueFactory<Position, String>("name"));
@@ -314,29 +439,23 @@ public class Controller implements Initializable{
 		try {
 			posSalarycol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomDoubleStringConverter()));
 		}catch(Exception e) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Tiền lương phải là số nguyên!");
-			alert.show();
+			showErrorAlert("Tiền lương phải là số nguyên!");
 			return;
 		}
-		search_position();
-		search_position_salary();
+		search_position_combined();
     }
 	
 	/**
 	 * 
-	 * @param event: 
-	 * 
-	 * 
+	 * @param event
+	 * Thêm thông tin một nhân viên mới
 	 */
 	@FXML
 	public void Add (ActionEvent event) {
 		if(!employeeID.getText().trim().equals("") && !employeeName.getText().trim().equals("")) {
 			for (Employee temp: employeeList) {
 				if(temp.getId() == Integer.parseInt(employeeID.getText().trim())) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
-					alert.setContentText("ID đã được sử dụng!");
-					alert.show();
+					showErrorAlert("ID đã được sử dụng!");
 					return;
 				}
 			}
@@ -344,16 +463,12 @@ public class Controller implements Initializable{
 			try {
 				newEmployee.setId(Integer.parseInt(employeeID.getText().trim()));
 			}catch(Exception e) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				alert.setContentText("ID phải là số nguyên!");
-				alert.show();
+				showErrorAlert("ID phải là số nguyên!");
 				return;
 			}
 			newEmployee.setName(employeeName.getText().trim());
 			if(checkPos(employeeName.getText().trim()) == 0 && !employeePosition.getText().trim().equals("")) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				alert.setContentText("Cảnh báo hiện không có chức vụ này!\n* Nếu bạn muốn sử dụng tên này vui lòng tạo chức vụ này.\n* Xác nhận lại tại cột 'Chức vụ' để cập nhật lại lương thưởng cho nhân viên này.");
-				alert.show();
+				showWarningAlert("Cảnh báo hiện không có chức vụ này!\n* Nếu bạn muốn sử dụng tên này vui lòng tạo chức vụ này.\n* Xác nhận lại tại cột 'Chức vụ' để cập nhật lại lương thưởng cho nhân viên này.");
 			}
 			newEmployee.setPositionName(employeePosition.getText().trim());
 			try {
@@ -361,9 +476,7 @@ public class Controller implements Initializable{
 					newEmployee.setBonus(Integer.parseInt(employeeSalaryBonus.getText().trim()));
 				}
 			}catch(Exception e) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				alert.setContentText("Tiền thưởng phải là số nguyên!");
-				alert.show();
+				showErrorAlert("Tiền thưởng phải là số nguyên!");
 				return;
 			}
 			newEmployee.setSalary(employeePosition.getText().trim(), dataPos);
@@ -375,26 +488,27 @@ public class Controller implements Initializable{
 			employeeSalaryBonus.setText("");
 			updateTableEmployee();
 		}else {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Thiếu thông tin!");
-			alert.show();
+			showErrorAlert("Thiếu thông tin!");
 		}
-		search_employee();
-		search_employee_salary();
+		search_employee_combined();
 	}
 	
+	/**
+	 * 
+	 * @param event
+	 * Thêm thông tin một chức vụ mới
+	 */
+	@FXML
 	public void AddPos (ActionEvent event) {
 		if(!positionID.getText().trim().equals("") && !positionName.getText().trim().equals("") && !positionSalary.getText().trim().equals("")) {
 			for (Position temp: positionList) {
 				if(temp.getID() == Integer.parseInt(positionID.getText().trim()) || temp.getName().equals(positionName.getText().trim())) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION);
 					if(temp.getID() == Integer.parseInt(positionID.getText().trim())) {
-						alert.setContentText("ID đã được sử dụng!");
+						showErrorAlert("ID đã được sử dụng!");
 					}else {
-						alert.setContentText("Đã được có chức vụ này!");
+						showErrorAlert("Đã có chức vụ này!");
 					} 
 					
-					alert.show();
 					return;
 				}
 			}
@@ -402,18 +516,14 @@ public class Controller implements Initializable{
 			try {
 				newPosition.setID(Integer.parseInt(positionID.getText().trim()));
 			}catch(Exception e) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				alert.setContentText("ID phải là số nguyên!");
-				alert.show();
+				showErrorAlert("ID phải là số nguyên!");
 				return;
 			}
 			newPosition.setName(positionName.getText().trim());
 			try {
 				newPosition.setSalaryCoefficient(Double.parseDouble(positionSalary.getText().trim()));
 			}catch(Exception e) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-				alert.setContentText("Tiền lương phải là số nguyên!");
-				alert.show();
+				showErrorAlert("Tiền lương phải là số nguyên!");
 				return;
 			}
 			positionList.add(newPosition);
@@ -423,40 +533,47 @@ public class Controller implements Initializable{
 			positionSalary.setText("");
 			updateTablePosition();
 		}else {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Thiếu thông tin!");
-			alert.show();
-			search_position();
-			search_position_salary();
+			showErrorAlert("Thiếu thông tin!");
 		}
+		search_position_combined();
 	}
 	
+	/**
+	 * 
+	 * @param event
+	 * Xóa một nhân viên được chỉ định
+	 */
+	@FXML
 	public void Remove (ActionEvent event) {
 		Employee selected = tbEmployee.getSelectionModel().getSelectedItem();
 		if (selected == null) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Chọn nhân viên trước khi xóa!");
-			alert.show();
+			showErrorAlert("Chọn nhân viên trước khi xóa!");
 		}
 		employeeList.remove(selected);
 		dataEmp.removeEmployee(selected);
-		search_employee();
-		search_employee_salary();
+		search_employee_combined();
 	}
 	
+	/**
+	 * 
+	 * @param event
+	 * Xóa một chức vụ được chỉ định
+	 */
+	@FXML
 	public void RemovePos (ActionEvent event) {
 		Position selected = tbPosition.getSelectionModel().getSelectedItem();
 		if (selected == null) {
-			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			alert.setContentText("Chọn nhân viên trước khi xóa!");
-			alert.show();
+			showErrorAlert("Chọn chức vụ trước khi xóa!");
 		}
 		positionList.remove(selected);
 		dataPos.removePosition(selected);
-		search_position();
-		search_position_salary();
+		search_position_combined();
 	}
 	
+	/**
+	 * Lọc nhân viên theo từ khóa
+	 */
+	@Deprecated
 	@FXML
 	void search_employee() {
 		FilteredList<Employee> filteredData = new FilteredList<>(employeeList, p -> true);
@@ -488,10 +605,14 @@ public class Controller implements Initializable{
         tbEmployee.setItems(filteredData);
 	}
 	
+	/**
+	 * Lọc chức vụ theo từ khóa
+	 */
+	@Deprecated
 	@FXML
 	void search_position() {
+		
 		FilteredList<Position> filteredData = new FilteredList<>(positionList, p -> true);
-
         filterFieldPos.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(position -> {
                 if (newValue == null || newValue.trim().isEmpty()) {
@@ -517,6 +638,43 @@ public class Controller implements Initializable{
         tbPosition.setItems(filteredData);
 	}
 	
+	/**
+	 * Lọc chức vụ theo hệ số lương
+	 */
+	@Deprecated
+	@FXML
+	void search_position_salary() {
+			FilteredList<Position> filteredData = new FilteredList<>(positionList, p -> true);	
+			positionSalary.textProperty().addListener((observable, oldValue, newValue) -> {
+				filteredData.setPredicate(position -> {
+	                if (newValue == null || newValue.trim().isEmpty()) {
+	                    return true;
+	                }
+	                try {
+	                	Double comparisionValue = Double.parseDouble(newValue);
+
+	                	if (position.getSalaryCoefficient() >= comparisionValue) {
+		                	return true;
+		                } 
+
+		                return false;
+	                }catch(Exception e) {
+	                	return true;
+	                }
+	            });
+			});
+	        SortedList<Position> sortedData = new SortedList<>(filteredData);
+
+			sortedData.comparatorProperty().bind(tbPosition.comparatorProperty());
+
+	        tbPosition.setItems(filteredData);
+
+	}
+	
+	/**
+	 * Lọc nhân viên theo hệ số lương
+	 */
+	@Deprecated
 	@FXML
 	void search_employee_salary() {
 			FilteredList<Employee> filteredData = new FilteredList<>(employeeList, p -> true);	
@@ -526,13 +684,13 @@ public class Controller implements Initializable{
 	                    return true;
 	                }
 	                try {
-	                	Double comparisionValue = Double.parseDouble(newValue);
-	                	
-	                	if (employee.getSalary() - employee.getBonus() >= comparisionValue) {
-		                	return true;
-		                } 
-		                
-		                return false;
+		                Double comparisionValue = Double.parseDouble(newValue);
+		                	
+		                if (employee.getSalaryCoefficient() >= comparisionValue) {
+			                return true;
+			            } 
+			                
+			               return false;
 	                }catch(Exception e) {
 	                	return true;
 	                }
@@ -546,38 +704,142 @@ public class Controller implements Initializable{
 		
 	}
 	
+	/*
+	 * Tạo bảng đã được lọc tìm kiếm của tbEmployee
+	 */
+	private FilteredList<Employee> filteredDataEmp = new FilteredList<>(employeeList, p -> true);
+	/**
+	 * Lọc nhân viên theo từ khóa và hệ số lương
+	 */
 	@FXML
-	void search_position_salary() {
-			FilteredList<Position> filteredData = new FilteredList<>(positionList, p -> true);	
-			positionSalary.textProperty().addListener((observable, oldValue, newValue) -> {
-				filteredData.setPredicate(position -> {
-	                if (newValue == null || newValue.trim().isEmpty()) {
+	void search_employee_combined() {
+
+	    // Combine the textProperty listeners from the two previous methods
+	    ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
+	        filteredDataEmp.setPredicate(employee -> {
+	            // Get the value from both fields
+	            String filterValue = filterFieldEmp.getText().trim();
+	            String salaryValue = employeeSalary.getText().trim();
+	            Double comparisionValue;
+	            try {
+	                comparisionValue = Double.parseDouble(salaryValue);
+	            } catch (Exception e) {
+	                comparisionValue = null;
+	            }
+
+	            if (filterValue == null || filterValue.trim().isEmpty()) {
+	                if (comparisionValue == null) {
 	                    return true;
+	                } else {
+	                    return employee.getSalaryCoefficient() >= comparisionValue;
 	                }
-	                try {
-	                	Double comparisionValue = Double.parseDouble(newValue);
-	                	
-	                	if (position.getSalaryCoefficient() >= comparisionValue) {
-		                	return true;
-		                } 
-		                
-		                return false;
-	                }catch(Exception e) {
-	                	return true;
-	                }
-	            });
-			});
-	        SortedList<Position> sortedData = new SortedList<>(filteredData);
-	
-			sortedData.comparatorProperty().bind(tbPosition.comparatorProperty());
-		
-	        tbPosition.setItems(filteredData);
-		
+	            }
+
+	            String lowerCaseFilter = filterValue.toLowerCase();
+	            if (String.valueOf(employee.getId()).contains(lowerCaseFilter)) {
+	                return comparisionValue == null || employee.getSalaryCoefficient() >= comparisionValue;
+	            } else if (employee.getName().toLowerCase().contains(lowerCaseFilter)) {
+	                return comparisionValue == null || employee.getSalaryCoefficient() >= comparisionValue;
+	            } else if (employee.getPositionName().toLowerCase().contains(lowerCaseFilter)) {
+	                return comparisionValue == null || employee.getSalaryCoefficient() >= comparisionValue;
+	            } else if (String.valueOf(employee.getBonus()).contains(lowerCaseFilter)) {
+	                return comparisionValue == null || employee.getSalaryCoefficient() >= comparisionValue;
+	            } else if (String.valueOf(employee.getSalary()).contains(lowerCaseFilter)) {
+	                return comparisionValue == null || employee.getSalaryCoefficient() >= comparisionValue;
+	            }
+	            return false;
+	        });
+	    };
+
+	    filterFieldEmp.textProperty().addListener(changeListener);
+	    employeeSalary.textProperty().addListener(changeListener);
+
+	    SortedList<Employee> sortedData = new SortedList<>(filteredDataEmp);
+	    sortedData.comparatorProperty().bind(tbEmployee.comparatorProperty());
+	    tbEmployee.setItems(filteredDataEmp);
 	}
 	
+	/*
+	 * Tạo bảng đã được lọc tìm kiếm của tbPosition
+	 */
+	private FilteredList<Position> filteredDataPos = new FilteredList<>(positionList, p -> true);
+	/**
+	 * Lọc chức vụ theo từ khóa và hệ số lương
+	 */
+	@FXML
+	void search_position_combined() {
+	  
+	    // Combine the textProperty listeners from the two previous methods
+	    ChangeListener<String> changeListener = (observable, oldValue, newValue) -> {
+	        filteredDataPos.setPredicate(position -> {
+	            // Get the value from both fields
+	            String filterValue = filterFieldPos.getText().trim();
+	            String salaryValue = positionSalaryS.getText().trim();
+	            Double comparisionValue;
+	            try {
+	                comparisionValue = Double.parseDouble(salaryValue);
+	            } catch (Exception e) {
+	                comparisionValue = null;
+	            }
+
+	            if (filterValue == null || filterValue.trim().isEmpty()) {
+	                if (comparisionValue == null) {
+	                    return true;
+	                } else {
+	                    return position.getSalaryCoefficient() >= comparisionValue;
+	                }
+	            }
+
+	            String lowerCaseFilter = filterValue.toLowerCase();
+	            if (String.valueOf(position.getID()).contains(lowerCaseFilter)) {
+	                return comparisionValue == null || position.getSalaryCoefficient() >= comparisionValue;
+	            } else if (position.getName().toLowerCase().contains(lowerCaseFilter)) {
+	                return comparisionValue == null || position.getSalaryCoefficient() >= comparisionValue;
+	            } else if (String.valueOf(position.getSalaryCoefficient()).contains(lowerCaseFilter)) {
+	                return comparisionValue == null || position.getSalaryCoefficient() >= comparisionValue;
+	            } 
+	            return false;
+	        });
+	    };
+
+	    filterFieldPos.textProperty().addListener(changeListener);
+	    positionSalaryS.textProperty().addListener(changeListener);
+
+	    SortedList<Position> sortedData = new SortedList<>(filteredDataPos);
+	    sortedData.comparatorProperty().bind(tbPosition.comparatorProperty());
+	    tbPosition.setItems(filteredDataPos);
+	}
+
+	/**
+	 * Override hàm initialize của giao diện Initialize thuộc fxml
+	 * + Hiển thị tbEmployee
+	 * + Hiển thị tbPosition
+	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		updateTableEmployee();
 		updateTablePosition();
+	}
+	
+	@FXML
+	public void loadDataEmp() {
+		dataEmp.setEmployeeList(data.loadDataEmp());
+		employeeList = FXCollections.observableArrayList(dataEmp.getEmployeeList());
+	
+	}
+	
+	@FXML
+	public void saveDataEmp() {
+		data.saveDataEmp();
+	}
+	
+	@FXML
+	public void loadDataPos() {
+		data.loadDataPos();
+	}
+	
+	@FXML
+	public void saveDataPos() {
+		data.saveDataPos();
 	}
 }

@@ -30,9 +30,9 @@ public class Employee implements Serializable {
         return name;
     }
 
-//    public double getSalaryCoefficient() {
-//        return salaryCoefficient;
-//    }
+    public double getSalaryCoefficient() {
+        return this.salary - this.bonus;
+    }
 
     public double getSalary() {
     	return this.salary;
@@ -50,6 +50,12 @@ public class Employee implements Serializable {
         this.name = name;
     }
     
+    /**
+     * 
+     * @param position
+     * @param positions
+     * Tính lương dựa trên tiền thưởng và hệ số lương
+     */
     public void setSalary(String position, PositionManagementSystem positions) {
     	double salary_Default = 0.0;
     	for(Position temp: positions.getPositions()) {
