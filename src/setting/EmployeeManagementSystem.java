@@ -38,28 +38,16 @@ public class EmployeeManagementSystem {
     
     public void updateEmployeePosition(int index, String position, PositionManagementSystem positions) {
     	employeeList.get(index).setPositionName(position);
-    	employeeList.get(index).setSalaryCoefficient(position, positions);
+    	employeeList.get(index).setSalary(position, positions);
     }
     
     public void updateEmployeeSalary(String position, PositionManagementSystem positions) {
     	for (Employee temp: this.employeeList) {
-    		temp.setSalaryCoefficient(position, positions);
+    		temp.setSalary(position, positions);
     	}
     }
     
     public void updateEmployeeSalaryCoefficient(int index, double salaryCoefficient) {
-    	employeeList.get(index).setSalaryCoefficient(salaryCoefficient);
-    }
-
-	public List<Employee> getEmployeesBySalaryCoefficient(double salary) {
-        List<Employee> filteredEmployees = new ArrayList<>();
-
-        for (Employee employee : employeeList) {
-            if (employee.getSalaryCoefficient() - employee.getBonus() >= salary) {
-                filteredEmployees.add(employee);
-            }
-        }
-
-        return filteredEmployees;
+    	employeeList.get(index).setSalary(salaryCoefficient);
     }
 }

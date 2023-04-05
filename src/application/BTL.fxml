@@ -48,7 +48,7 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="562.0" prefWidth="664.0">
                <children>
-                  <TableView fx:id="tbEmployee" layoutX="16.0" layoutY="33.0" prefHeight="402.0" prefWidth="571.0" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="33.0">
+                  <TableView fx:id="tbEmployee" layoutX="16.0" layoutY="33.0" prefHeight="402.0" prefWidth="570.0" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="33.0">
                     <columns>
                       <TableColumn fx:id="empIDcol" onEditCommit="#changeEmpID" prefWidth="85.0" text="ID" />
                       <TableColumn fx:id="empNamecol" onEditCommit="#changeEmpName" prefWidth="140.0" text="Họ và tên" />
@@ -82,59 +82,64 @@
                      </font>
                   </Label>
                   <Button layoutX="364.0" layoutY="474.0" mnemonicParsing="false" onAction="#Remove" prefHeight="30.0" prefWidth="61.0" text="Remove" />
-                  <TextField fx:id="filterFieldEmp" layoutX="438.0" layoutY="4.0" promptText="Search..." AnchorPane.topAnchor="4.0" />
-                  <Label layoutX="391.0" layoutY="8.0" text="Search :" />
+                  <TextField fx:id="filterFieldEmp" layoutX="437.0" layoutY="4.0" promptText="Search..." AnchorPane.topAnchor="4.0" />
+                  <Label layoutX="390.0" layoutY="8.0" text="Search :" />
                   <TextField fx:id="employeeSalary" layoutX="438.0" layoutY="487.0" />
                   <Label layoutX="449.0" layoutY="462.0" text="Hệ số lương trên :">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Search" />
-                  <Button layoutX="516.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Reset" />
+                  <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="43.0" text="Save" />
+                  <Button layoutX="492.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="Save and close" />
                </children></AnchorPane>
       </content>
     </Tab>
       <Tab text="    Chức vụ    ">
          <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="562.0" prefWidth="664.0">
+            <AnchorPane>
                <children>
-                  <TableView fx:id="tbPosition" layoutX="16.0" layoutY="33.0" prefHeight="402.0" prefWidth="571.0" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="33.0">
-                     <columns>
-                        <TableColumn fx:id="posIDcol" onEditCommit="#changePosID" prefWidth="85.0" text="ID" />
-                        <TableColumn fx:id="posNamecol" onEditCommit="#changePosName" prefWidth="140.0" text="Tên chức vụ" />
-                        <TableColumn fx:id="posSalarycol" onEditCommit="#changePosSalary" prefWidth="345.0" text="Hệ số lương" />
-                     </columns>
-                  </TableView>
-                  <Button layoutX="364.0" layoutY="518.0" mnemonicParsing="false" onAction="#AddPos" prefHeight="30.0" prefWidth="61.0" text="Add" />
-                  <TextField fx:id="positionName" layoutX="123.0" layoutY="474.0" prefHeight="25.0" prefWidth="217.0" />
-                  <TextField fx:id="positionSalary" layoutX="15.0" layoutY="523.0" prefHeight="25.0" prefWidth="325.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
-                  <TextField fx:id="positionID" layoutX="15.0" layoutY="474.0" prefHeight="25.0" prefWidth="84.0" AnchorPane.bottomAnchor="63.0" AnchorPane.leftAnchor="15.0" />
-                  <Label layoutX="16.0" layoutY="449.0" prefHeight="17.0" prefWidth="30.0" text="ID :">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="124.0" layoutY="449.0" text="Tên chức vụ :">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="17.0" layoutY="499.0" text="Hệ số lương :">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Button layoutX="364.0" layoutY="474.0" mnemonicParsing="false" onAction="#RemovePos" prefHeight="30.0" prefWidth="61.0" text="Remove" />
-                  <TextField fx:id="filterFieldPos" layoutX="438.0" layoutY="4.0" promptText="Search..." AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="4.0" />
-                  <Label layoutX="391.0" layoutY="8.0" text="Search :" AnchorPane.rightAnchor="169.0" AnchorPane.topAnchor="8.0" />
-                  <TextField fx:id="positionSalaryS" layoutX="438.0" layoutY="487.0" />
-                  <Label layoutX="449.0" layoutY="462.0" text="Hệ số lương trên :">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Button layoutX="487.0" layoutY="523.0" mnemonicParsing="false" text="Search" />
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="562.0" prefWidth="602.0">
+                     <children>
+                        <TableView fx:id="tbPosition" layoutX="16.0" layoutY="33.0" prefHeight="402.0" prefWidth="570.0" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="33.0">
+                           <columns>
+                              <TableColumn fx:id="posIDcol" onEditCommit="#changePosID" prefWidth="85.0" text="ID" />
+                              <TableColumn fx:id="posNamecol" onEditCommit="#changePosName" prefWidth="140.0" text="Tên chức vụ" />
+                              <TableColumn fx:id="posSalarycol" onEditCommit="#changePosSalary" prefWidth="345.0" text="Hệ số lương" />
+                           </columns>
+                        </TableView>
+                        <TextField fx:id="positionName" layoutX="123.0" layoutY="474.0" prefHeight="25.0" prefWidth="217.0" />
+                        <TextField fx:id="positionSalary" layoutX="15.0" layoutY="523.0" prefHeight="25.0" prefWidth="325.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="15.0" />
+                        <TextField fx:id="positionID" layoutX="15.0" layoutY="474.0" prefHeight="25.0" prefWidth="84.0" AnchorPane.bottomAnchor="63.0" AnchorPane.leftAnchor="15.0" />
+                        <Button layoutX="364.0" layoutY="518.0" mnemonicParsing="false" onAction="#AddPos" prefHeight="30.0" prefWidth="61.0" text="Add" />
+                        <Label layoutX="16.0" layoutY="449.0" prefHeight="17.0" prefWidth="30.0" text="ID :">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="124.0" layoutY="449.0" text="Tên chức vụ :">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="17.0" layoutY="499.0" text="Hệ số lương :">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="364.0" layoutY="474.0" mnemonicParsing="false" onAction="#RemovePos" prefHeight="30.0" prefWidth="61.0" text="Remove" />
+                        <TextField fx:id="filterFieldPos" layoutX="437.0" layoutY="4.0" promptText="Search..." AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="4.0" />
+                        <Label layoutX="390.0" layoutY="8.0" text="Search :" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="8.0" />
+                        <TextField fx:id="positionSalaryS" layoutX="438.0" layoutY="487.0" />
+                        <Label layoutX="449.0" layoutY="462.0" text="Hệ số lương trên :">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="43.0" text="Save" />
+                        <Button layoutX="492.0" layoutY="523.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="94.0" text="Save and close" />
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </content>

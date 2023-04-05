@@ -9,7 +9,7 @@ public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
     private String name;
-    private double salaryCoefficient;
+    private double salary;
     private String positionName;
     private double bonus;
 
@@ -30,10 +30,14 @@ public class Employee implements Serializable {
         return name;
     }
 
-    public double getSalaryCoefficient() {
-        return salaryCoefficient;
-    }
+//    public double getSalaryCoefficient() {
+//        return salaryCoefficient;
+//    }
 
+    public double getSalary() {
+    	return this.salary;
+    }
+    
     public String getPositionName() {
         return positionName;
     }
@@ -46,18 +50,18 @@ public class Employee implements Serializable {
         this.name = name;
     }
     
-    public void setSalaryCoefficient(String position, PositionManagementSystem positions) {
+    public void setSalary(String position, PositionManagementSystem positions) {
     	double salary_Default = 0.0;
     	for(Position temp: positions.getPositions()) {
     		if(position.equals(temp.getName())) {
     			salary_Default = temp.getSalaryCoefficient();
     		}
     	}
-    	this.salaryCoefficient = salary_Default + this.bonus;
+    	this.salary = salary_Default + this.bonus;
     }
     
-    public void setSalaryCoefficient(double salaryCoefficient) {
-        this.salaryCoefficient = Math.round(salaryCoefficient);
+    public void setSalary(double salary) {
+        this.salary = Math.round(salary);
     }
 
     public void setPositionName(String positionName) {

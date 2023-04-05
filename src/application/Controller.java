@@ -206,11 +206,11 @@ public class Controller implements Initializable{
     public void changeEmpSalary (CellEditEvent edditedcell) {
     	if(edditedcell.getNewValue() != null) {
 	    	Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
-	    	employeeSlected.setSalaryCoefficient(Double.parseDouble(edditedcell.getNewValue().toString().trim()));
+	    	employeeSlected.setSalary(Double.parseDouble(edditedcell.getNewValue().toString().trim()));
 	    	dataEmp.updateEmployeeSalaryCoefficient(employeeList.indexOf(employeeSlected), Double.parseDouble(edditedcell.getNewValue().toString().trim()));
     	}else {
     		Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
-	    	employeeSlected.setSalaryCoefficient(0.0);
+	    	employeeSlected.setSalary(0.0);
 	    	dataEmp.updateEmployeeSalaryCoefficient(employeeList.indexOf(employeeSlected), 0.0);
     	}
     	updateTableEmployee();
@@ -285,7 +285,7 @@ public class Controller implements Initializable{
     	empIDcol.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("id"));
 		empNamecol.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));
 		empPositioncol.setCellValueFactory(new PropertyValueFactory<Employee, String>("positionName"));
-		empSalarycol.setCellValueFactory(new PropertyValueFactory<Employee, Double>("salaryCoefficient"));
+		empSalarycol.setCellValueFactory(new PropertyValueFactory<Employee, Double>("salary"));
 		tbEmployee.setItems(employeeList);
 		tbEmployee.setEditable(true);
 		empIDcol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomIntegerStringConverter()));
@@ -300,6 +300,7 @@ public class Controller implements Initializable{
 			return;
 		}
 		search_employee();
+		search_employee_salary();
     }
     
     public void updateTablePosition() {
@@ -319,6 +320,7 @@ public class Controller implements Initializable{
 			return;
 		}
 		search_position();
+		search_position_salary();
     }
 	
 	/**
@@ -364,7 +366,7 @@ public class Controller implements Initializable{
 				alert.show();
 				return;
 			}
-			newEmployee.setSalaryCoefficient(employeePosition.getText().trim(), dataPos);
+			newEmployee.setSalary(employeePosition.getText().trim(), dataPos);
 			employeeList.add(newEmployee);
 			dataEmp.addEmployee(newEmployee);
 			employeeName.setText("");
@@ -378,6 +380,7 @@ public class Controller implements Initializable{
 			alert.show();
 		}
 		search_employee();
+		search_employee_salary();
 	}
 	
 	public void AddPos (ActionEvent event) {
@@ -424,6 +427,7 @@ public class Controller implements Initializable{
 			alert.setContentText("Thiếu thông tin!");
 			alert.show();
 			search_position();
+			search_position_salary();
 		}
 	}
 	
@@ -437,6 +441,7 @@ public class Controller implements Initializable{
 		employeeList.remove(selected);
 		dataEmp.removeEmployee(selected);
 		search_employee();
+		search_employee_salary();
 	}
 	
 	public void RemovePos (ActionEvent event) {
@@ -449,6 +454,7 @@ public class Controller implements Initializable{
 		positionList.remove(selected);
 		dataPos.removePosition(selected);
 		search_position();
+		search_position_salary();
 	}
 	
 	@FXML
@@ -457,7 +463,7 @@ public class Controller implements Initializable{
 
         filterFieldEmp.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(employee -> {
-                if (newValue == null || newValue.isEmpty()) {
+                if (newValue == null || newValue.trim().isEmpty()) {
                     return true;
                 }
 
@@ -466,7 +472,7 @@ public class Controller implements Initializable{
                 	return true;
                 } else if (employee.getName().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                } else if (String.valueOf(employee.getSalaryCoefficient()).contains(lowerCaseFilter)) {
+                } else if (String.valueOf(employee.getSalary()).contains(lowerCaseFilter)) {
                 	return true;
                 } else if (employee.getPositionName().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
@@ -488,7 +494,7 @@ public class Controller implements Initializable{
 
         filterFieldPos.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(position -> {
-                if (newValue == null || newValue.isEmpty()) {
+                if (newValue == null || newValue.trim().isEmpty()) {
                     return true;
                 }
 
@@ -513,20 +519,60 @@ public class Controller implements Initializable{
 	
 	@FXML
 	void search_employee_salary() {
-		FilteredList<Employee> filteredData = new FilteredList<>(employeeList, p -> true);
-
-		employeeSalary.textProperty().addListener((observable, oldValue, newValue) -> {
-			filteredData.setPredicate(employee -> {
-			    System.out.println("Salary Coefficient: " + employee.getSalaryCoefficient());
-			    System.out.println("Bonus: " + employee.getBonus());
-			    return (employee.getSalaryCoefficient() - employee.getBonus()) >= Double.parseDouble(newValue);
+			FilteredList<Employee> filteredData = new FilteredList<>(employeeList, p -> true);	
+			employeeSalary.textProperty().addListener((observable, oldValue, newValue) -> {
+				filteredData.setPredicate(employee -> {
+	                if (newValue == null || newValue.trim().isEmpty()) {
+	                    return true;
+	                }
+	                try {
+	                	Double comparisionValue = Double.parseDouble(newValue);
+	                	
+	                	if (employee.getSalary() - employee.getBonus() >= comparisionValue) {
+		                	return true;
+		                } 
+		                
+		                return false;
+	                }catch(Exception e) {
+	                	return true;
+	                }
+	            });
 			});
-        });
-        SortedList<Employee> sortedData = new SortedList<>(filteredData);
-
-		sortedData.comparatorProperty().bind(tbEmployee.comparatorProperty());
+	        SortedList<Employee> sortedData = new SortedList<>(filteredData);
 	
-        tbEmployee.setItems(filteredData);
+			sortedData.comparatorProperty().bind(tbEmployee.comparatorProperty());
+		
+	        tbEmployee.setItems(filteredData);
+		
+	}
+	
+	@FXML
+	void search_position_salary() {
+			FilteredList<Position> filteredData = new FilteredList<>(positionList, p -> true);	
+			positionSalary.textProperty().addListener((observable, oldValue, newValue) -> {
+				filteredData.setPredicate(position -> {
+	                if (newValue == null || newValue.trim().isEmpty()) {
+	                    return true;
+	                }
+	                try {
+	                	Double comparisionValue = Double.parseDouble(newValue);
+	                	
+	                	if (position.getSalaryCoefficient() >= comparisionValue) {
+		                	return true;
+		                } 
+		                
+		                return false;
+	                }catch(Exception e) {
+	                	return true;
+	                }
+	            });
+			});
+	        SortedList<Position> sortedData = new SortedList<>(filteredData);
+	
+			sortedData.comparatorProperty().bind(tbPosition.comparatorProperty());
+		
+	        tbPosition.setItems(filteredData);
+		
 	}
 	
 	@Override
