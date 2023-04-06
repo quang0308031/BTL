@@ -7,11 +7,17 @@ import employee.Employee;
 import javafx.collections.ObservableList;
 import position.Position;
 
+/**
+ * 
+ * @author Nguyễn Thanh Quang
+ *
+ * Lớp quản lí danh sách chức vụ.
+ */
 public class PositionManagementSystem {
     private List<Position> positions;
     
     /**
-     * Tạo danh sách chức vụ
+     * Tạo danh sách chức vụ rỗng.
      */
     public PositionManagementSystem() {
         this.positions = new ArrayList<>();
@@ -28,7 +34,7 @@ public class PositionManagementSystem {
 	/**
 	 * 
 	 * @param position
-	 * Thêm chức vụ
+	 * Thêm chức vụ.
 	 */
 	public void addPosition(Position position) {
         positions.add(position);
@@ -37,7 +43,7 @@ public class PositionManagementSystem {
 	/**
 	 * 
 	 * @param position
-	 * Xóa chức vụ
+	 * Xóa chức vụ.
 	 */
     public void removePosition(Position position) {
         positions.remove(position);
@@ -47,7 +53,7 @@ public class PositionManagementSystem {
      * 
      * @param index
      * @param ID
-     * Chỉnh sửa ID của chức vụ dựa theo index
+     * Chỉnh sửa ID của chức vụ dựa theo index.
      */
     public void updatePositionID(int index, int ID) {
     	positions.get(index).setID(ID);
@@ -57,7 +63,7 @@ public class PositionManagementSystem {
      * 
      * @param index
      * @param name
-     * Chỉnh sửa tên của chức vụ dựa theo index
+     * Chỉnh sửa tên của chức vụ dựa theo index.
      */
     public void updatePositionName(int index, String name) {
     	positions.get(index).setName(name);
@@ -67,7 +73,7 @@ public class PositionManagementSystem {
      * 
      * @param index
      * @param salaryCoefficient
-     * Chỉnh sửa hệ số lương của chức vụ dựa theo index
+     * Chỉnh sửa hệ số lương của chức vụ dựa theo index.
      */
     public void updatePositionSalaryCoefficient(int index, double salaryCoefficient) {
     	positions.get(index).setSalaryCoefficient(salaryCoefficient);

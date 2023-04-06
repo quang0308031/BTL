@@ -91,8 +91,9 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" onAction="#loadDataEmp" prefHeight="25.0" prefWidth="70.0" text="Load" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="94.0" />
-                  <Button layoutX="493.0" layoutY="523.0" mnemonicParsing="false" onAction="#saveDataEmp" prefHeight="25.0" prefWidth="70.0" text="Save" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" onMouseClicked="#loadEmployees" prefHeight="25.0" prefWidth="70.0" text="Load" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="94.0" />
+                  <Button layoutX="493.0" layoutY="523.0" mnemonicParsing="false" onMouseClicked="#saveEmployees" prefHeight="25.0" prefWidth="70.0" text="Save" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                  <Button layoutX="22.0" layoutY="4.0" mnemonicParsing="false" onAction="#saveEmployeeAs" onMouseClicked="#saveEmployees" prefHeight="25.0" prefWidth="70.0" text="Save as..." />
                </children></AnchorPane>
       </content>
     </Tab>
@@ -137,8 +138,9 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" onAction="#loadDataPos" prefHeight="25.0" prefWidth="70.0" text="Load" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="94.0" />
-                        <Button layoutX="492.0" layoutY="523.0" mnemonicParsing="false" onAction="#saveDataPos" prefHeight="25.0" prefWidth="70.0" text="Save" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                        <Button layoutX="438.0" layoutY="523.0" mnemonicParsing="false" onAction="#loadPositions" prefHeight="25.0" prefWidth="70.0" text="Load" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="94.0" />
+                        <Button layoutX="492.0" layoutY="523.0" mnemonicParsing="false" onAction="#savePosition" prefHeight="25.0" prefWidth="70.0" text="Save" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="15.0" />
+                        <Button layoutX="22.0" layoutY="4.0" mnemonicParsing="false" onAction="#savePositionAs" onMouseClicked="#saveEmployees" prefHeight="25.0" prefWidth="70.0" text="Save as..." />
                      </children>
                   </AnchorPane>
                </children>

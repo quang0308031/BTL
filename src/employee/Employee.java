@@ -5,6 +5,12 @@ import java.io.Serializable;
 import position.Position;
 import setting.PositionManagementSystem;
 
+/**
+ * 
+ * @author Nguyễn Thanh Quang
+ *
+ * Lớp nhân viên.
+ */
 public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     private int id;
@@ -54,7 +60,7 @@ public class Employee implements Serializable {
      * 
      * @param position
      * @param positions
-     * Tính lương dựa trên tiền thưởng và hệ số lương
+     * Tính lương dựa trên tiền thưởng và hệ số lương.
      */
     public void setSalary(String position, PositionManagementSystem positions) {
     	double salary_Default = 0.0;

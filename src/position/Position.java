@@ -2,6 +2,12 @@ package position;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * @author Nguyễn Thanh Quang
+ *
+ * Lớp chức vụ.
+ */
 public class Position implements Serializable {
     private static final long serialVersionUID = 1L;
     private int ID;

@@ -1,5 +1,7 @@
 package application;
 
+import application.CustomFunction;
+
 import employee.Employee;
 import position.Position;
 import setting.EmployeeManagementSystem;
@@ -27,6 +29,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -36,115 +39,36 @@ import javafx.stage.Stage;
 /**
  * 
  * @author Nguyễn Thanh Quang
- *
+ * 
+ * Lớp điều khiển tableview.
  */
 public class Controller implements Initializable{
 	LoadAndSave data = new LoadAndSave();
 	
+	
+	
 	/*
-	 * Tạo list rỗng chứa thông tin danh sách nhân viên
+	 * Tạo list rỗng chứa thông tin danh sách nhân viên.
 	 */
 	private EmployeeManagementSystem dataEmp = data.getDataEmp();
 	/*
-	 * Tạo list rỗng chứa thông tin danh sách chức vụ
+	 * Tạo list rỗng chứa thông tin danh sách chức vụ.
 	 */
 	private PositionManagementSystem dataPos = data.getDataPos();
 	
+	
+	
     /*
-     * Tạo dữ liệu cho tbEmployee
+     * Tạo dữ liệu cho tbEmployee.
      */
     private ObservableList<Employee> employeeList = FXCollections.observableArrayList(dataEmp.getEmployeeList());
     
     /*
-     * Tạo dữ liệu cho tbPosition
+     * Tạo dữ liệu cho tbPosition.
      */
     private ObservableList<Position> positionList = FXCollections.observableArrayList(dataPos.getPositions());
 	
-	/**
-	 * 
-	 * @param contentText
-	 * Hiển thị cửa sổ báo lỗi
-	 */
-	private void showErrorAlert(String contentText) {
-	    Alert alert = new Alert(Alert.AlertType.ERROR);
-	    alert.setTitle("Error");
-	    alert.setHeaderText("Error!");
-	    alert.setContentText(contentText);
-	    
-	    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-	    stage.getIcons().add(new Image("file:C:\\Users\\quang\\Documents\\BTL\\icon\\error-icon-4.png"));
-	    
-	    alert.showAndWait();
-	    
-	}
 	
-	/**
-	 * 
-	 * @param contentText
-	 * Hiển thị cửa sổ cảnh báo
-	 */
-	private void showWarningAlert(String contentText) {
-	    Alert alert = new Alert(Alert.AlertType.WARNING);
-	    alert.setTitle("Waning");
-	    alert.setHeaderText("Waning!");
-	    alert.setContentText(contentText);
-	    
-	    Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-	    stage.getIcons().add(new Image("file:C:\\Users\\quang\\Documents\\BTL\\icon\\6897039.png"));
-	    
-	    alert.showAndWait();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * Kiểm tra nếu String không phải dạng số thì trả về -1
-	 */
-	public static class CustomIntegerStringConverter extends IntegerStringConverter {
-	    private final IntegerStringConverter converter = new IntegerStringConverter();
-
-	    @Override
-	    public String toString(Integer object) {
-	        try {
-	            return converter.toString(object);
-	        } catch (NumberFormatException e) {
-	        	System.out.println(e);
-	        }
-	        return null;
-	    }
-
-	    @Override
-	    public Integer fromString(String string) {
-	        try {
-	            return converter.fromString(string);
-	        } catch (NumberFormatException e) {
-	        	System.out.println(e);
-	        }
-	        return -1;
-	    }
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * Kiểm tra nếu String không phải dạng số thì trả về -1
-	 */
-	public class CustomDoubleStringConverter extends StringConverter<Double> {
-	    @Override
-	    public String toString(Double value) {
-	        if (value == null) {
-	            return "";
-	        }
-	        return String.format("%.0f", value);
-	    }
-
-	    @Override
-	    public Double fromString(String string) {
-	        try {
-	            return Double.parseDouble(string);
-	        } catch (NumberFormatException e) {
-	            return null;
-	        }
-	    }
-	}
 	
     @FXML
     private TableColumn<Employee, Integer> empIDcol;
@@ -213,7 +137,7 @@ public class Controller implements Initializable{
      * 
      * 
      * @param position
-     * @return 0 nếu có chức vụ, 1 nếu không có chức vụ
+     * @return 0 nếu có chức vụ, 1 nếu không có chức vụ.
      */
     public int checkPos(String position) {
     	int check = 0;
@@ -229,7 +153,7 @@ public class Controller implements Initializable{
     /**
      * 
      * @param edditedcell
-     * Thay đổi một ô được chọn trong cột empIDcol
+     * Thay đổi một ô được chọn trong cột empIDcol, kiểm tra ID đảm bảo không trùng, không rỗng và phải là số nguyên.
      */
     public void changeEmpID (CellEditEvent edditedcell) {
     	int index = tbEmployee.getSelectionModel().getSelectedIndex();
@@ -238,9 +162,9 @@ public class Controller implements Initializable{
 	    	for (Employee temp: employeeList) {
 				if(temp.getId() == temp_ID && empIDcol.getCellData(index) != temp_ID || temp_ID == -1) {
 					if(temp_ID == -1) {
-						showErrorAlert("ID phải là số nguyên!");
+						CustomFunction.showErrorAlert("ID phải là số nguyên!");
 					}else {
-						showErrorAlert("ID đã được sử dụng!");
+						CustomFunction.showErrorAlert("ID đã được sử dụng!");
 					}
 					updateTableEmployee();
 					return;
@@ -250,7 +174,7 @@ public class Controller implements Initializable{
 	    	employeeSlected.setId(temp_ID);
 	    	dataEmp.updateEmployeeID(employeeList.indexOf(employeeSlected), temp_ID);
     	}else {
-    		showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
+    		CustomFunction.showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
     	}
     	updateTableEmployee();
     }
@@ -258,7 +182,7 @@ public class Controller implements Initializable{
     /**
      * 
      * @param edditedcell
-     * Thay đổi một ô được chọn trong cột empNamecol
+     * Thay đổi một ô được chọn trong cột empNamecol, kiểm tra đầu vào là chuỗi rỗng thì báo lỗi.
      */
     public void changeEmpName (CellEditEvent edditedcell) {
     	if(!edditedcell.getNewValue().toString().trim().equals("")) {
@@ -266,7 +190,7 @@ public class Controller implements Initializable{
 	    	employeeSlected.setName(edditedcell.getNewValue().toString().trim());
 	    	dataEmp.updateEmployeeName(employeeList.indexOf(employeeSlected), edditedcell.getNewValue().toString().trim());
     	}else {
-    		showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
+    		CustomFunction.showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
     	}
     	updateTableEmployee();
     }
@@ -274,12 +198,12 @@ public class Controller implements Initializable{
     /**
      * 
      * @param edditedcell
-     * Thay đổi một ô được chọn trong cột empPositioncol
+     * Thay đổi một ô được chọn trong cột empPositioncol, phát hiện chức vụ đã được thiết lập chưa, thay đổi lương nhân viên theo chức vụ được thay đổi.
      */
     public void changeEmpPosition (CellEditEvent edditedcell) {
     	Employee employeeSlected = tbEmployee.getSelectionModel().getSelectedItem();
     	if(checkPos(edditedcell.getNewValue().toString().trim()) == 0 && !edditedcell.getNewValue().toString().trim().equals("")) {
-    		showWarningAlert("Cảnh báo hiện không có chức vụ này!\n* Nếu bạn muốn sử dụng tên này vui lòng tạo chức vụ này.\n* Xác nhận lại tại cột 'Chức vụ' để cập nhật lại lương thưởng cho nhân viên này.");
+    		CustomFunction.showWarningAlert("Cảnh báo hiện không có chức vụ này!\n* Nếu bạn muốn sử dụng tên này vui lòng tạo chức vụ này.\n* Xác nhận lại tại cột 'Chức vụ' để cập nhật lại lương thưởng cho nhân viên này.");
     	}
     	employeeSlected.setPositionName(edditedcell.getNewValue().toString().trim());
     	dataEmp.updateEmployeePosition(employeeList.indexOf(employeeSlected), edditedcell.getNewValue().toString().trim(), dataPos);
@@ -289,7 +213,7 @@ public class Controller implements Initializable{
     /**
      * 
      * @param edditedcell
-     * Thay đổi một ô được chọn trong cột empSalarycol
+     * Thay đổi một ô được chọn trong cột empSalarycol, sửa thưởng bằng không nếu nhập vào không phải số nguyên, thảy đổi lại lương nếu có tiền thưởng mới.
      */
     public void changeEmpBonus (CellEditEvent edditedcell) {
     	if(edditedcell.getNewValue() != null) {
@@ -309,7 +233,7 @@ public class Controller implements Initializable{
     /**
      * 
      * @param edditedcell
-     * Thay đổi một ô được chọn trong cột empSalarycol
+     * Thay đổi một ô được chọn trong cột empSalarycol, mặc định tiền lương là 0 nếu nhập vào không phải số nguyên.
      */
     public void changeEmpSalary (CellEditEvent edditedcell) {
     	if(edditedcell.getNewValue() != null) {
@@ -327,7 +251,7 @@ public class Controller implements Initializable{
     /**
      * 
      * @param edditedcell
-     * Thay đổi một ô được chọn trong cột posIDcol
+     * Thay đổi một ô được chọn trong cột posIDcol, kiểm tra ID đảm bảo không trùng, không rỗng và phải là số nguyên.
      */
     public void changePosID (CellEditEvent edditedcell) {
     	int index = tbPosition.getSelectionModel().getSelectedIndex();
@@ -336,9 +260,9 @@ public class Controller implements Initializable{
 	    	for (Position temp: positionList) {
 				if(temp.getID() == temp_ID && posIDcol.getCellData(index) != temp_ID) {
 					if(temp_ID == -1) {
-						showErrorAlert("ID phải là số nguyên!");
+						CustomFunction.showErrorAlert("ID phải là số nguyên!");
 					}else {
-						showErrorAlert("ID đã được sử dụng!");
+						CustomFunction.showErrorAlert("ID đã được sử dụng!");
 					}
 					updateTablePosition();
 					return;
@@ -348,7 +272,7 @@ public class Controller implements Initializable{
 	    	positionSlected.setID(temp_ID);
 	    	dataPos.updatePositionID(index, temp_ID);
     	}else {
-    		showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
+    		CustomFunction.showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
     	}
     	updateTablePosition();
     }
@@ -356,7 +280,7 @@ public class Controller implements Initializable{
     /**
      * 
      * @param edditedcell
-     * Thay đổi một ô được chọn trong cột posNamecol
+     * Thay đổi một ô được chọn trong cột posNamecol, kiểm tra ID đảm bảo không trùng, không rỗng.
      */
     public void changePosName (CellEditEvent edditedcell) {
     	int index = tbPosition.getSelectionModel().getSelectedIndex();
@@ -364,7 +288,7 @@ public class Controller implements Initializable{
     		for (Position temp: positionList) {
     			String temp_Name = edditedcell.getNewValue().toString().trim();
 				if(temp.getName().equals(temp_Name)&& !posNamecol.getCellData(index).equals(temp_Name)) {
-					showErrorAlert("Đã có chức vụ này!");
+					CustomFunction.showErrorAlert("Đã có chức vụ này!");
 					updateTablePosition();
 					return;
 				}
@@ -373,7 +297,7 @@ public class Controller implements Initializable{
 	    	positionSlected.setName(edditedcell.getNewValue().toString().trim());
 	    	dataPos.updatePositionName(positionList.indexOf(positionSlected), edditedcell.getNewValue().toString().trim());
     	}else {
-    		showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
+    		CustomFunction.showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
     	}
     	updateTablePosition();
     }
@@ -381,7 +305,7 @@ public class Controller implements Initializable{
     /**
      * 
      * @param edditedcell
-     * Thay đổi một ô được chọn trong cột posSalarycol
+     * Thay đổi một ô được chọn trong cột posSalarycol, mặc định lương bằng 0 nếu truyền vào không phải số nguyên.
      */
     public void changePosSalary (CellEditEvent edditedcell) {
     	if(edditedcell.getNewValue() != null) {
@@ -397,7 +321,83 @@ public class Controller implements Initializable{
     }
     
     /**
-     * Update tbEmployee khi có thay đổi
+     * 
+     * @param event
+     * Tải dữ liệu nhân viên vào chương trình, kiểm tra cấu trúc bảng và báo lỗi nếu không đúng bằng nút "Load".
+     */
+    @FXML
+    void loadEmployees(MouseEvent event) {
+    	data.loadDataEmp();
+    	
+    	try {
+    		Employee check = dataEmp.getEmployeeList().get(0);
+    		employeeList.clear();
+    		employeeList.addAll(dataEmp.getEmployeeList());
+    	} catch (Exception e) {
+    		CustomFunction.showErrorAlert("File không đúng cấu trúc!");
+    	}
+    }
+    
+    /**
+     * 
+     * @param event
+     * Tải dữ liệu chức vụ vào chương trình, kiểm tra cấu trúc bảng và báo lỗi nếu không đúng bằng nút bấm "Load".
+     */
+    @FXML
+    void loadPositions(ActionEvent event) {
+    	data.loadDataPos();
+    	
+    	try {
+    		Position check = dataPos.getPositions().get(0);
+	    	positionList.clear();
+	    	positionList.addAll(dataPos.getPositions());
+    	} catch (Exception e) {
+    		CustomFunction.showErrorAlert("File không đúng cấu trúc!");
+    	}
+    }
+    
+    /**
+     * 
+     * @param event
+     * Lưu dữ liệu nhân viên vào file đã tải trước đó bằng nút "Save".
+     */
+    @FXML
+    void saveEmployees(MouseEvent event) {
+    	data.saveDataEmp();
+    }
+    
+    /**
+     * 
+     * @param event
+     * Lưu dữ liệu chức vụ vào file đã tải trước đó bằng nút "Save".
+     */
+    @FXML
+    void savePosition(ActionEvent event) {
+    	data.saveDataPos();
+    }
+    
+    /**
+     * 
+     * @param event
+     * Lưu dữ liệu nhân viên vào đường dẫn chỉ định bằng nút "Save as...".
+     */
+    @FXML
+    void saveEmployeeAs(ActionEvent event) {
+    	data.saveAsDataEmp();
+    }
+    
+    /**
+     * 
+     * @param event
+     * Lưu dữ liệu chức vụ vào đường dẫn chỉ định bằng nút "Save as...".
+     */
+    @FXML
+    void savePositionAs(ActionEvent event) {
+    	data.saveAsDataPos();
+    }
+    
+    /**
+     * Update tbEmployee khi có thay đổi.
      */
     public void updateTableEmployee() {
     	empIDcol.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("id"));
@@ -407,26 +407,26 @@ public class Controller implements Initializable{
 		empBonuscol.setCellValueFactory(new PropertyValueFactory<Employee, Double>("bonus"));
 		tbEmployee.setItems(employeeList);
 		tbEmployee.setEditable(true);
-		empIDcol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomIntegerStringConverter()));
+		empIDcol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomFunction.CustomIntegerStringConverter()));
 		empNamecol.setCellFactory(TextFieldTableCell.forTableColumn());
 		empPositioncol.setCellFactory(TextFieldTableCell.forTableColumn());
 		try {
-			empSalarycol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomDoubleStringConverter()));
+			empSalarycol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomFunction.CustomDoubleStringConverter()));
 		}catch(Exception e) {
-			showErrorAlert("Tiền lương phải là số nguyên!");
+			CustomFunction.showErrorAlert("Tiền lương phải là số nguyên!");
 			return;
 		}
 		try {
-			empBonuscol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomDoubleStringConverter()));
+			empBonuscol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomFunction.CustomDoubleStringConverter()));
 		}catch(Exception e) {
-			showErrorAlert("Tiền lương phải là số nguyên!");
+			CustomFunction.showErrorAlert("Tiền lương phải là số nguyên!");
 			return;
 		}
 		search_employee_combined();
     }
     
     /**
-     * Update tbPosition khi có thay đổi
+     * Update tbPosition khi có thay đổi.
      */
     public void updateTablePosition() {
     	posIDcol.setCellValueFactory(new PropertyValueFactory<Position, Integer>("ID"));
@@ -434,12 +434,12 @@ public class Controller implements Initializable{
 		posSalarycol.setCellValueFactory(new PropertyValueFactory<Position, Double>("salaryCoefficient"));
 		tbPosition.setItems(positionList);
 		tbPosition.setEditable(true);
-		posIDcol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomIntegerStringConverter()));
+		posIDcol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomFunction.CustomIntegerStringConverter()));
 		posNamecol.setCellFactory(TextFieldTableCell.forTableColumn());
 		try {
-			posSalarycol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomDoubleStringConverter()));
+			posSalarycol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomFunction.CustomDoubleStringConverter()));
 		}catch(Exception e) {
-			showErrorAlert("Tiền lương phải là số nguyên!");
+			CustomFunction.showErrorAlert("Tiền lương phải là số nguyên!");
 			return;
 		}
 		search_position_combined();
@@ -448,27 +448,28 @@ public class Controller implements Initializable{
 	/**
 	 * 
 	 * @param event
-	 * Thêm thông tin một nhân viên mới
+	 * Thêm thông tin một nhân viên mới bằng nút "Add".
 	 */
 	@FXML
 	public void Add (ActionEvent event) {
 		if(!employeeID.getText().trim().equals("") && !employeeName.getText().trim().equals("")) {
+			try {
+				Integer.parseInt(employeeID.getText().trim());
+			}catch(Exception e) {
+				CustomFunction.showErrorAlert("ID phải là số nguyên!");
+				return;
+			}
 			for (Employee temp: employeeList) {
 				if(temp.getId() == Integer.parseInt(employeeID.getText().trim())) {
-					showErrorAlert("ID đã được sử dụng!");
+					CustomFunction.showErrorAlert("ID đã được sử dụng!");
 					return;
 				}
 			}
 			Employee newEmployee = new Employee();
-			try {
-				newEmployee.setId(Integer.parseInt(employeeID.getText().trim()));
-			}catch(Exception e) {
-				showErrorAlert("ID phải là số nguyên!");
-				return;
-			}
+			newEmployee.setId(Integer.parseInt(employeeID.getText().trim()));
 			newEmployee.setName(employeeName.getText().trim());
 			if(checkPos(employeeName.getText().trim()) == 0 && !employeePosition.getText().trim().equals("")) {
-				showWarningAlert("Cảnh báo hiện không có chức vụ này!\n* Nếu bạn muốn sử dụng tên này vui lòng tạo chức vụ này.\n* Xác nhận lại tại cột 'Chức vụ' để cập nhật lại lương thưởng cho nhân viên này.");
+				CustomFunction.showWarningAlert("Cảnh báo hiện không có chức vụ này!\n* Nếu bạn muốn sử dụng tên này vui lòng tạo chức vụ này.\n* Xác nhận lại tại cột 'Chức vụ' để cập nhật lại lương thưởng cho nhân viên này.");
 			}
 			newEmployee.setPositionName(employeePosition.getText().trim());
 			try {
@@ -476,8 +477,8 @@ public class Controller implements Initializable{
 					newEmployee.setBonus(Integer.parseInt(employeeSalaryBonus.getText().trim()));
 				}
 			}catch(Exception e) {
-				showErrorAlert("Tiền thưởng phải là số nguyên!");
-				return;
+				CustomFunction.showErrorAlert("Tiền thưởng phải là số nguyên!");
+				newEmployee.setBonus(0.0);
 			}
 			newEmployee.setSalary(employeePosition.getText().trim(), dataPos);
 			employeeList.add(newEmployee);
@@ -487,8 +488,9 @@ public class Controller implements Initializable{
 			employeePosition.setText("");
 			employeeSalaryBonus.setText("");
 			updateTableEmployee();
+			return;
 		}else {
-			showErrorAlert("Thiếu thông tin!");
+			CustomFunction.showErrorAlert("Thiếu thông tin!");
 		}
 		search_employee_combined();
 	}
@@ -496,35 +498,36 @@ public class Controller implements Initializable{
 	/**
 	 * 
 	 * @param event
-	 * Thêm thông tin một chức vụ mới
+	 * Thêm thông tin một chức vụ mới bằng nút "Add".
 	 */
 	@FXML
 	public void AddPos (ActionEvent event) {
 		if(!positionID.getText().trim().equals("") && !positionName.getText().trim().equals("") && !positionSalary.getText().trim().equals("")) {
+			try {
+				Integer.parseInt(positionID.getText().trim());
+			}catch(Exception e) {
+				CustomFunction.showErrorAlert("ID phải là số nguyên!");
+				return;
+			}
 			for (Position temp: positionList) {
 				if(temp.getID() == Integer.parseInt(positionID.getText().trim()) || temp.getName().equals(positionName.getText().trim())) {
 					if(temp.getID() == Integer.parseInt(positionID.getText().trim())) {
-						showErrorAlert("ID đã được sử dụng!");
+						CustomFunction.showErrorAlert("ID đã được sử dụng!");
 					}else {
-						showErrorAlert("Đã có chức vụ này!");
+						CustomFunction.showErrorAlert("Đã có chức vụ này!");
 					} 
 					
 					return;
 				}
 			}
 			Position newPosition = new Position();
-			try {
-				newPosition.setID(Integer.parseInt(positionID.getText().trim()));
-			}catch(Exception e) {
-				showErrorAlert("ID phải là số nguyên!");
-				return;
-			}
+			newPosition.setID(Integer.parseInt(positionID.getText().trim()));
 			newPosition.setName(positionName.getText().trim());
 			try {
 				newPosition.setSalaryCoefficient(Double.parseDouble(positionSalary.getText().trim()));
 			}catch(Exception e) {
-				showErrorAlert("Tiền lương phải là số nguyên!");
-				return;
+				CustomFunction.showErrorAlert("Tiền lương phải là số nguyên!");
+				newPosition.setSalaryCoefficient(0.0);
 			}
 			positionList.add(newPosition);
 			dataPos.addPosition(newPosition);
@@ -533,7 +536,7 @@ public class Controller implements Initializable{
 			positionSalary.setText("");
 			updateTablePosition();
 		}else {
-			showErrorAlert("Thiếu thông tin!");
+			CustomFunction.showErrorAlert("Thiếu thông tin!");
 		}
 		search_position_combined();
 	}
@@ -541,13 +544,13 @@ public class Controller implements Initializable{
 	/**
 	 * 
 	 * @param event
-	 * Xóa một nhân viên được chỉ định
+	 * Xóa một nhân viên được chỉ định bằng nút "Remove".
 	 */
 	@FXML
 	public void Remove (ActionEvent event) {
 		Employee selected = tbEmployee.getSelectionModel().getSelectedItem();
 		if (selected == null) {
-			showErrorAlert("Chọn nhân viên trước khi xóa!");
+			CustomFunction.showErrorAlert("Chọn nhân viên trước khi xóa!");
 		}
 		employeeList.remove(selected);
 		dataEmp.removeEmployee(selected);
@@ -557,13 +560,13 @@ public class Controller implements Initializable{
 	/**
 	 * 
 	 * @param event
-	 * Xóa một chức vụ được chỉ định
+	 * Xóa một chức vụ được chỉ định bằng nút "Remove".
 	 */
 	@FXML
 	public void RemovePos (ActionEvent event) {
 		Position selected = tbPosition.getSelectionModel().getSelectedItem();
 		if (selected == null) {
-			showErrorAlert("Chọn chức vụ trước khi xóa!");
+			CustomFunction.showErrorAlert("Chọn chức vụ trước khi xóa!");
 		}
 		positionList.remove(selected);
 		dataPos.removePosition(selected);
@@ -571,7 +574,7 @@ public class Controller implements Initializable{
 	}
 	
 	/**
-	 * Lọc nhân viên theo từ khóa
+	 * Lọc nhân viên theo từ khóa.
 	 */
 	@Deprecated
 	@FXML
@@ -606,7 +609,7 @@ public class Controller implements Initializable{
 	}
 	
 	/**
-	 * Lọc chức vụ theo từ khóa
+	 * Lọc chức vụ theo từ khóa.
 	 */
 	@Deprecated
 	@FXML
@@ -639,7 +642,7 @@ public class Controller implements Initializable{
 	}
 	
 	/**
-	 * Lọc chức vụ theo hệ số lương
+	 * Lọc chức vụ theo hệ số lương.
 	 */
 	@Deprecated
 	@FXML
@@ -672,7 +675,7 @@ public class Controller implements Initializable{
 	}
 	
 	/**
-	 * Lọc nhân viên theo hệ số lương
+	 * Lọc nhân viên theo hệ số lương.
 	 */
 	@Deprecated
 	@FXML
@@ -705,11 +708,11 @@ public class Controller implements Initializable{
 	}
 	
 	/*
-	 * Tạo bảng đã được lọc tìm kiếm của tbEmployee
+	 * Tạo list đã được lọc tìm kiếm của tbEmployee.
 	 */
 	private FilteredList<Employee> filteredDataEmp = new FilteredList<>(employeeList, p -> true);
 	/**
-	 * Lọc nhân viên theo từ khóa và hệ số lương
+	 * Lọc nhân viên theo từ khóa và hệ số lương.
 	 */
 	@FXML
 	void search_employee_combined() {
@@ -760,11 +763,11 @@ public class Controller implements Initializable{
 	}
 	
 	/*
-	 * Tạo bảng đã được lọc tìm kiếm của tbPosition
+	 * Tạo list đã được lọc tìm kiếm của tbPosition.
 	 */
 	private FilteredList<Position> filteredDataPos = new FilteredList<>(positionList, p -> true);
 	/**
-	 * Lọc chức vụ theo từ khóa và hệ số lương
+	 * Lọc chức vụ theo từ khóa và hệ số lương.
 	 */
 	@FXML
 	void search_position_combined() {
@@ -819,27 +822,5 @@ public class Controller implements Initializable{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		updateTableEmployee();
 		updateTablePosition();
-	}
-	
-	@FXML
-	public void loadDataEmp() {
-		dataEmp.setEmployeeList(data.loadDataEmp());
-		employeeList = FXCollections.observableArrayList(dataEmp.getEmployeeList());
-	
-	}
-	
-	@FXML
-	public void saveDataEmp() {
-		data.saveDataEmp();
-	}
-	
-	@FXML
-	public void loadDataPos() {
-		data.loadDataPos();
-	}
-	
-	@FXML
-	public void saveDataPos() {
-		data.saveDataPos();
 	}
 }

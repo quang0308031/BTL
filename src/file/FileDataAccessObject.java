@@ -3,20 +3,38 @@ package file;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import application.CustomFunction;
 
+/**
+ * 
+ * @author Nguyễn Thanh Quang
+ *
+ * @param <T>
+ * 
+ * Lớp thực hiện lưu và tải dữ liệu.
+ */
 public class FileDataAccessObject<T extends Serializable> {
     private String fileName;
     
     /**
-     * 
-     * @param fileName
-     * Lấy đường dẫn
+     * Tạo đối tượng FileDataAccessObject
      */
-    public FileDataAccessObject(String fileName) {
-        this.fileName = fileName;
-    }
+    public FileDataAccessObject() {}
 
-    /**
+    public FileDataAccessObject(String fileName) {
+		super();
+		this.fileName = fileName;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	/**
      * 
      * @param data
      * Lưu dữ liệu từ file
@@ -24,8 +42,8 @@ public class FileDataAccessObject<T extends Serializable> {
     public void save(List<T> data) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
             out.writeObject(data);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            CustomFunction.showErrorAlert("Bạn chưa tải file hoặc không thể lưu vào đường dẫn này!");
         }
     }
 
@@ -34,12 +52,13 @@ public class FileDataAccessObject<T extends Serializable> {
      * @return 
      * Lấy dữ liệu từ file
      */
-    public List<T> load() {
+    @SuppressWarnings("unchecked")
+	public List<T> load() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
             return (List<T>) in.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {
+            CustomFunction.showErrorAlert("Không thể mở file từ đường dẫn này!");
+        } 
         return new ArrayList<>();
     }
 }
