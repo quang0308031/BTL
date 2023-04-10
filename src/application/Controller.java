@@ -104,16 +104,10 @@ public class Controller implements Initializable{
     private TextField filterFieldEmp;
 
     @FXML
-    private TableColumn<Position, Integer> posIDcol;
-
-    @FXML
     private TableColumn<Position, String> posNamecol;
 
     @FXML
     private TableColumn<Position, Double> posSalarycol;
-
-    @FXML
-    private TextField positionID;
 
     @FXML
     private TextField positionName;
@@ -246,35 +240,6 @@ public class Controller implements Initializable{
 	    	dataEmp.updateEmployeeSalary(employeeList.indexOf(employeeSlected), 0.0);
     	}
     	updateTableEmployee();
-    }
-    
-    /**
-     * 
-     * @param edditedcell
-     * Thay đổi một ô được chọn trong cột posIDcol, kiểm tra ID đảm bảo không trùng, không rỗng và phải là số nguyên.
-     */
-    public void changePosID (CellEditEvent edditedcell) {
-    	int index = tbPosition.getSelectionModel().getSelectedIndex();
-    	if(edditedcell.getNewValue() != null) {
-	    	int temp_ID = Integer.parseInt(edditedcell.getNewValue().toString().trim());
-	    	for (Position temp: positionList) {
-				if(temp.getID() == temp_ID && posIDcol.getCellData(index) != temp_ID) {
-					if(temp_ID == -1) {
-						CustomFunction.showErrorAlert("ID phải là số nguyên!");
-					}else {
-						CustomFunction.showErrorAlert("ID đã được sử dụng!");
-					}
-					updateTablePosition();
-					return;
-				}
-	    	}
-	    	Position positionSlected = tbPosition.getSelectionModel().getSelectedItem();
-	    	positionSlected.setID(temp_ID);
-	    	dataPos.updatePositionID(index, temp_ID);
-    	}else {
-    		CustomFunction.showErrorAlert("Không thể thay thế bằng chuỗi rỗng!");
-    	}
-    	updateTablePosition();
     }
     
     /**
@@ -429,12 +394,10 @@ public class Controller implements Initializable{
      * Update tbPosition khi có thay đổi.
      */
     public void updateTablePosition() {
-    	posIDcol.setCellValueFactory(new PropertyValueFactory<Position, Integer>("ID"));
 		posNamecol.setCellValueFactory(new PropertyValueFactory<Position, String>("name"));
 		posSalarycol.setCellValueFactory(new PropertyValueFactory<Position, Double>("salaryCoefficient"));
 		tbPosition.setItems(positionList);
 		tbPosition.setEditable(true);
-		posIDcol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomFunction.CustomIntegerStringConverter()));
 		posNamecol.setCellFactory(TextFieldTableCell.forTableColumn());
 		try {
 			posSalarycol.setCellFactory(TextFieldTableCell.forTableColumn(new CustomFunction.CustomDoubleStringConverter()));
@@ -502,26 +465,15 @@ public class Controller implements Initializable{
 	 */
 	@FXML
 	public void AddPos (ActionEvent event) {
-		if(!positionID.getText().trim().equals("") && !positionName.getText().trim().equals("") && !positionSalary.getText().trim().equals("")) {
-			try {
-				Integer.parseInt(positionID.getText().trim());
-			}catch(Exception e) {
-				CustomFunction.showErrorAlert("ID phải là số nguyên!");
-				return;
-			}
+		if(!positionName.getText().trim().equals("") && !positionSalary.getText().trim().equals("")) {
 			for (Position temp: positionList) {
-				if(temp.getID() == Integer.parseInt(positionID.getText().trim()) || temp.getName().equals(positionName.getText().trim())) {
-					if(temp.getID() == Integer.parseInt(positionID.getText().trim())) {
-						CustomFunction.showErrorAlert("ID đã được sử dụng!");
-					}else {
+				if(temp.getName().equals(positionName.getText().trim())) {
 						CustomFunction.showErrorAlert("Đã có chức vụ này!");
-					} 
 					
 					return;
 				}
 			}
 			Position newPosition = new Position();
-			newPosition.setID(Integer.parseInt(positionID.getText().trim()));
 			newPosition.setName(positionName.getText().trim());
 			try {
 				newPosition.setSalaryCoefficient(Double.parseDouble(positionSalary.getText().trim()));
@@ -532,7 +484,6 @@ public class Controller implements Initializable{
 			positionList.add(newPosition);
 			dataPos.addPosition(newPosition);
 			positionName.setText("");
-			positionID.setText("");
 			positionSalary.setText("");
 			updateTablePosition();
 		}else {
@@ -623,9 +574,7 @@ public class Controller implements Initializable{
                 }
 
                 String lowerCaseFilter = newValue.toLowerCase();
-                if (String.valueOf(position.getID()).contains(lowerCaseFilter)) {
-                	return true;
-                } else if (position.getName().toLowerCase().contains(lowerCaseFilter)) {
+                if (position.getName().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 } else if (String.valueOf(position.getSalaryCoefficient()).contains(lowerCaseFilter)) {
                 	return true;
@@ -794,9 +743,7 @@ public class Controller implements Initializable{
 	            }
 
 	            String lowerCaseFilter = filterValue.toLowerCase();
-	            if (String.valueOf(position.getID()).contains(lowerCaseFilter)) {
-	                return comparisionValue == null || position.getSalaryCoefficient() >= comparisionValue;
-	            } else if (position.getName().toLowerCase().contains(lowerCaseFilter)) {
+	            if (position.getName().toLowerCase().contains(lowerCaseFilter)) {
 	                return comparisionValue == null || position.getSalaryCoefficient() >= comparisionValue;
 	            } else if (String.valueOf(position.getSalaryCoefficient()).contains(lowerCaseFilter)) {
 	                return comparisionValue == null || position.getSalaryCoefficient() >= comparisionValue;
