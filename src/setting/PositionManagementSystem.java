@@ -48,16 +48,6 @@ public class PositionManagementSystem {
     public void removePosition(Position position) {
         positions.remove(position);
     }
-
-    /**
-     * 
-     * @param index
-     * @param ID
-     * Chỉnh sửa ID của chức vụ dựa theo index.
-     */
-    public void updatePositionID(int index, int ID) {
-    	positions.get(index).setID(ID);
-    }
     
     /**
      * 
