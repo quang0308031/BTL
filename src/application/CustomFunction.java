@@ -8,7 +8,6 @@ import javafx.util.converter.IntegerStringConverter;
 
 /**
  * 
- * @author Nguyễn Thanh Quang
  *
  * Lớp chứa hàm tùy chỉnh.
  */

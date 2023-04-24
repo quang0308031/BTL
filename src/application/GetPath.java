@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 
 /**
  * 
- * @author Nguyễn Thanh Quang
  *
  * Lớp lấy đường dẫn phục vụ lưu và tải.
  */

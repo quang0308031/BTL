@@ -9,7 +9,6 @@ import position.Position;
 
 /**
  * 
- * @author Nguyễn Thanh Quang
  *
  * Lớp quản lí danh sách chức vụ.
  */

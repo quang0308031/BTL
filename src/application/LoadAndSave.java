@@ -17,7 +17,6 @@ import application.CustomFunction;
 
 /**
  * 
- * @author Nguyễn Thanh Quang
  *
  * Lớp điều khiển lưu và tải dữ liệu.
  */

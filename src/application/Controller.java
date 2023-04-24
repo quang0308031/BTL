@@ -38,7 +38,6 @@ import javafx.stage.Stage;
 
 /**
  * 
- * @author Nguyễn Thanh Quang
  * 
  * Lớp điều khiển tableview.
  */

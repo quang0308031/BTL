@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 /**
  * 
- * @author Nguyễn Thanh Quang
  *
  * Lớp chức vụ.
  */

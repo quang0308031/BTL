@@ -7,7 +7,6 @@ import application.CustomFunction;
 
 /**
  * 
- * @author Nguyễn Thanh Quang
  *
  * @param <T>
  * 

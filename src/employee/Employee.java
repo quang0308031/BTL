@@ -7,7 +7,6 @@ import setting.PositionManagementSystem;
 
 /**
  * 
- * @author Nguyễn Thanh Quang
  *
  * Lớp nhân viên.
  */
