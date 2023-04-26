@@ -39,7 +39,7 @@ public class GetPath {
 	public String getPathToLoad() throws Exception{
 		FileChooser FC = new FileChooser();
 		FC.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Add all", "*"));
-		FC.setTitle("Save your file");
+		FC.setTitle("Load your file");
 		File file = FC.showOpenDialog(this.primaryStage);
 		return this.path = file.getAbsolutePath();
 	}
