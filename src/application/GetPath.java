@@ -15,7 +15,6 @@ public class GetPath {
 	private String path;
 	
 	public GetPath(String path) {
-			super();
 			this.path = path;
 	}
 	
